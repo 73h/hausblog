@@ -1,5 +1,11 @@
 <?php
 
 require '../autoload.php';
+require_once '../vendor/autoload.php';
 
-echo 73;
+$loader = new \Twig\Loader\ArrayLoader([
+    'index' => 'Hello {{ name }}!',
+]);
+$twig = new \Twig\Environment($loader);
+
+echo $twig->render('index', ['name' => 'Heiko']);

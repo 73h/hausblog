@@ -8,6 +8,11 @@ jobs:
     steps:
       - name: Get latest code
         uses: actions/checkout@v2
+      - name: Install dependencies
+        uses: "shivammathur/setup-php@v2"
+        with:
+            php-version: "latest"
+        uses: "ramsey/composer-install@v2"
       - name: Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.2.0
         with:
