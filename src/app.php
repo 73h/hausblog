@@ -21,6 +21,9 @@ class App
         $twig = new Environment($loader);
 
         echo $twig->render('index.html', ['site' => $this->site]);
+
+        var_dump($_GET);
+
     }
 
 }

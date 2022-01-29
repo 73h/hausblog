@@ -12,9 +12,9 @@ if (preg_match('/^\/?[a-z\-]+\/?$/', $uri)) {
     $_GET['site'] = preg_replace('/^\/?([a-z\-]+)\/?$/', '$1', $uri);
     chdir('www/');
     require 'index.php';
-} else if (preg_match('/^\/article\/?[a-z\-]+\/?$/', $uri)) {
+} else if (preg_match('/^\/?article\/?[a-z\-]+\/?$/', $uri)) {
     $_GET['site'] = 'article';
-    $_GET['article'] = preg_replace('/^\/?([a-z\-]+)\/?$/', '$1', $uri);
+    $_GET['article'] = preg_replace('/^\/?article\/?([a-z\-]+)\/?$/', '$1', $uri);
     chdir('www/');
     require 'index.php';
 } else {
