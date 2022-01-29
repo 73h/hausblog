@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    {% if not logged_in %}
+    <form method="POST" action="{{ url('login') }}">
+        <h3>Login</h3>
+        <p>
+            <label for="user">user</label><br>
+            <input type="text" placeholder="user" id="user" name="user">
+        </p>
+        <p>
+            <label for="password">password</label><br>
+            <input type="password" placeholder="password" id="password" name="password">
+        </p>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <p class="error">
+            {{ messages[0] }}
+        </p>
+        {% endif %}
+        {% endwith %}
+        <p>
+            <button type="submit">Login</button>
+        </p>
+    </form>
+    {% endif %}
+    {% if logged_in %}
+    Hallo {{ user }}.
+    {% endif %}
+</div>
+{% endblock %}

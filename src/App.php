@@ -24,6 +24,9 @@ class App
             case 'article':
                 $this->article();
                 break;
+            case 'login':
+                $this->login();
+                break;
             default:
                 $this->index();
         }
@@ -32,6 +35,11 @@ class App
     private function index()
     {
         exit($this->twig->render('index.html', ['name' => 'Heiko']));
+    }
+
+    private function login()
+    {
+        exit($this->twig->render('login.html', ['logged_in' => false]));
     }
 
     private function article()
