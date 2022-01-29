@@ -15,6 +15,8 @@ ini_set('error_log', BASE . 'error.log');
 require_once BASE . 'vendor/autoload.php';
 require BASE . 'autoload.php';
 
+var_dump($_GET);
+
 Route::add('/', function () {
     echo 'index';
 });
@@ -23,9 +25,4 @@ Route::add('/login', function () {
     echo 'login';
 });
 
-$routes = Route::getAll();
-foreach ($routes as $route) {
-    echo $route['expression'] . ' (' . $route['method'] . ')<br>';
-}
-
-var_dump($_GET);
+Route::run('/');
