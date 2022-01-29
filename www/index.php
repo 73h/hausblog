@@ -1,11 +1,10 @@
 <?php
 
-require '../autoload.php';
-require_once '../vendor/autoload.php';
+use src\App;
 
-$loader = new \Twig\Loader\ArrayLoader([
-    'index' => 'Hello {{ name }}!',
-]);
-$twig = new \Twig\Environment($loader);
+const BASE = __DIR__ . '/../';
 
-echo $twig->render('index', ['name' => 'Heiko']);
+require_once BASE . 'vendor/autoload.php';
+require BASE . 'autoload.php';
+
+new App();
