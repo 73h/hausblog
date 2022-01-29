@@ -1,7 +1,5 @@
 <?php
 
-use Steampixel\Route;
-
 const BASE = __DIR__ . '/../';
 
 /*
@@ -14,15 +12,4 @@ ini_set('error_log', BASE . 'error.log');
 
 require_once BASE . 'vendor/autoload.php';
 require BASE . 'autoload.php';
-
-var_dump($_GET);
-
-Route::add('/', function () {
-    echo 'index';
-});
-
-Route::add('/login', function () {
-    echo 'login';
-});
-
-Route::run('/');
+require_once BASE . 'src/routes.php';
