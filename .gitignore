@@ -473,3 +473,5 @@ composer.lock
 *.css.map
 *.sass.map
 *.scss.map
+
+error.log
