@@ -22,3 +22,10 @@ Route::add('/', function () {
 Route::add('/login', function () {
     echo 'login';
 });
+
+$routes = Route::getAll();
+foreach ($routes as $route) {
+    echo $route['expression'] . ' (' . $route['method'] . ')<br>';
+}
+
+var_dump($_GET);
