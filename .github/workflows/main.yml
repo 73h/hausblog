@@ -27,4 +27,4 @@ jobs:
             **/.git*/**
             README.md
             router.php
-            composer*
+            composer.*
