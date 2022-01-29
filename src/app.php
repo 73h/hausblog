@@ -2,6 +2,8 @@
 
 namespace src;
 
+require_once BASE . 'vendor/autoload.php';
+
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
