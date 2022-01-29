@@ -8,22 +8,39 @@ use Twig\Loader\FilesystemLoader;
 class App
 {
 
-    private string $site = 'index';
+    private Environment $twig;
 
     function __construct()
     {
-
-        if (array_key_exists('site', $_GET)) {
-            $this->site = $_GET['site'];
-        }
-
         $loader = new FilesystemLoader(BASE . 'templates');
-        $twig = new Environment($loader);
+        $this->twig = new Environment($loader);
 
-        echo $twig->render('index.html', ['site' => $this->site]);
+        // read and set site
+        $site = 'index';
+        if (array_key_exists('site', $_GET)) {
+            $site = $_GET['site'];
+        }
+        switch ($site) {
+            case 'article':
+                $this->article();
+                break;
+            default:
+                $this->index();
+        }
+    }
 
-        var_dump($_GET);
+    private function index()
+    {
+        exit($this->twig->render('index.html', ['name' => 'Heiko']));
+    }
 
+    private function article()
+    {
+        if (!array_key_exists('article', $_GET)) {
+            $this->index();
+        }
+        $article = $_GET['article'];
+        echo htmlspecialchars($article);
     }
 
 }
