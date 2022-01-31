@@ -23,7 +23,18 @@ class App
 
     public function login()
     {
-        exit($this->twig->render('login.html', ['logged_in' => false]));
+        $auth = (object)[
+            "logged_in" => false,
+            "user" => null,
+            "error_message" => null
+        ];
+        $error = null;
+        if (isset($_POST['user']) && isset($_POST['password'])) {
+            $auth->user = $_POST['user'];
+            $password = $_POST['password'];
+            $auth->error_message = 'Error 73';
+        }
+        exit($this->twig->render('login.html', ['auth' => $auth]));
     }
 
     public function article($article)

@@ -1,24 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="row">
-    {% if not logged_in %}
+    {% if not auth.logged_in %}
     <form method="POST" action="/login">
         <h3>Login</h3>
         <p>
             <label for="user">user</label><br>
-            <input type="text" placeholder="user" id="user" name="user">
+            <input type="text" placeholder="user" id="user" name="user" value="{{ auth.user }}">
         </p>
         <p>
             <label for="password">password</label><br>
             <input type="password" placeholder="password" id="password" name="password">
         </p>
+        {% if auth.error_message %}
+        <p class="error">
+            {{ auth.error_message }}
+        </p>
+        {% endif %}
         <p>
             <button type="submit">Login</button>
         </p>
     </form>
     {% endif %}
-    {% if logged_in %}
-    Hallo {{ user }}.
+    {% if auth.logged_in %}
+    Hallo {{ auth.user }}.
     {% endif %}
 </div>
 {% endblock %}
