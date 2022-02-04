@@ -18,4 +18,10 @@ Route::add('/article/([a-z0-9-]+)', function ($article) {
     $app->article($article);
 });
 
+Route::add('/webhook', function () {
+    $data = json_decode(file_get_contents('php://input'), TRUE);
+    $app = new App();
+    $app->webhook($data);
+}, 'post');
+
 Route::run('/');

@@ -1,6 +1,7 @@
 {
   "require": {
     "twig/twig": "3.3.7",
-    "steampixel/simple-php-router": "^0.7.0"
+    "steampixel/simple-php-router": "^0.7.0",
+    "vlucas/phpdotenv": "^5.4"
   }
 }
