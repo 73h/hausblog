@@ -2,7 +2,7 @@
 
 namespace src\app;
 
-class Image extends Database
+class Image
 {
 
     private ?int $pk_image = null;
@@ -16,7 +16,7 @@ class Image extends Database
 
     function __construct()
     {
-        parent::__construct();
+
     }
 
     function create(string $name, string $uploaded, string $title, string $image, string $type, int $width, int $height)
@@ -42,7 +42,9 @@ class Image extends Database
             $this->width,
             $this->height
         ];
-        parent::insert($sql, 'sssssii', $parameters);
+        Database::insert($sql, 'sssssii', $parameters);
+        Database::insert($sql, 'sssssii', $parameters);
+        Database::insert($sql, 'sssssii', $parameters);
     }
 
 }

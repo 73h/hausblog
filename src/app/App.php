@@ -3,7 +3,6 @@
 namespace src\app;
 
 use DateTime;
-use Dotenv\Dotenv;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -15,7 +14,6 @@ class App
 
     function __construct()
     {
-        Dotenv::createImmutable(BASE)->load();
         $loader = new FilesystemLoader(BASE . 'templates');
         $this->twig = new Environment($loader);
     }

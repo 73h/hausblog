@@ -12,4 +12,5 @@ ini_set('error_log', BASE . 'error.log');
 
 require_once BASE . 'vendor/autoload.php';
 require BASE . 'autoload.php';
+require_once BASE . 'src/init.php';
 require_once BASE . 'src/routes.php';

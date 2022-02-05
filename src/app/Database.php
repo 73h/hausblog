@@ -2,25 +2,38 @@
 
 namespace src\app;
 
-use mysqli;
+use MySQLi;
 
 class Database
 {
 
-    private ?object $conn;
+    private static ?Database $db = null;
+    private ?object $connection;
 
     function __construct()
     {
-        $this->conn = new mysqli($_ENV['DB_SERVER'], $_ENV['DB_USER'], $_ENV['DB_PASSWORD'], $_ENV['DB_NAME']);
-        if ($this->conn->connect_error) {
-            error_log("Connection failed: " . $this->conn->connect_error);
+        $this->connection = new MySQLi($_ENV['DB_SERVER'], $_ENV['DB_USER'], $_ENV['DB_PASSWORD'], $_ENV['DB_NAME']);
+        if ($this->connection->connect_error) {
+            error_log("Connection failed: " . $this->connection->connect_error);
             die("Database connection failed");
         }
     }
 
-    function insert(string $sql, string $types = '', array $parameters = [])
+    function __destruct()
     {
-        $stmt = $this->conn->prepare($sql);
+        $this->connection->close();
+    }
+
+    public static function getConnection(): MySQLi|null
+    {
+        if (self::$db == null) self::$db = new Database();
+        return self::$db->connection;
+    }
+
+    public static function insert(string $sql, string $types = '', array $parameters = [])
+    {
+        $connection = Database::getConnection();
+        $stmt = $connection->prepare($sql);
         $stmt->bind_param($types, ...$parameters);
         $stmt->execute();
     }
