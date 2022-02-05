@@ -1,3 +1,9 @@
-# hausblog
+# a blog with telegram integration
 
-    ngrok http -region eu 8080
+set Telegram Webhook
+
+    https://api.telegram.org/bot{bot_token}/setWebhook?url={url_to_send_updates_to}
+
+use ngrok for local development
+
+    ngrok http -region eu 8081
