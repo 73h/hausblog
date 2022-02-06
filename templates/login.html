@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="row">
-    {% if not auth.logged_in %}
+    {% if not login_state %}
     <form method="POST" action="/login">
         <h3>Login</h3>
         <p>
             <label for="code">code</label><br>
             <input type="password" placeholder="code" id="code" name="code">
         </p>
-        {% if auth.error_message %}
+        {% if message %}
         <p class="error">
-            {{ auth.error_message }}
+            {{ message }}
         </p>
         {% endif %}
         <p>
@@ -18,8 +18,8 @@
         </p>
     </form>
     {% endif %}
-    {% if auth.logged_in %}
-    <p>...</p>
+    {% if login_state %}
+    <p>Hallo {{ user }}.</p>
     {% endif %}
 </div>
 {% endblock %}

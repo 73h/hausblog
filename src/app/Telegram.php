@@ -2,8 +2,6 @@
 
 namespace src\app;
 
-use DateTime;
-
 class Telegram
 {
 
@@ -33,11 +31,10 @@ class Telegram
             $url_image = $this->getApiUrl(true) . $image_data->result->file_path;
             $type = preg_replace('/^.+\.([a-zA-Z]{2,6})$/', '$1', $image_data->result->file_path);
             $title = uniqid();
-            $now = new DateTime('NOW');
             $image = new Images();
             $image->insertImage(
                 name: $title . '.' . $type,
-                uploaded: $now->format('c'),
+                uploaded: now(),
                 title: $title,
                 image: file_get_contents($url_image),
                 type: $type,
@@ -52,7 +49,9 @@ class Telegram
     {
         if (Auth::isLoggedIn()) {
             if (str_starts_with($text, '/login')) {
-                $this->sendMessageToSender("Hallo " . Auth::$user . " \u{1F60D}");
+                $code = Auth::createLoginCode();
+                $message = sprintf("Hallo %s \u{1F60D}\r\nHier ist Dein Anmeldecode: %s", Auth::$user, $code);
+                $this->sendMessageToSender($message);
             }
         }
     }

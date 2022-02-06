@@ -39,14 +39,20 @@ class Database
         return $stmt;
     }
 
-    public static function insert(string $sql, string $types = '', array $parameters = [])
+    public static function insert(string $sql, string $types = '', array $parameters = []): int
     {
-        self::preparedQuery($sql, $types, $parameters);
+        $stmt = self::preparedQuery($sql, $types, $parameters);
+        return $stmt->insert_id;
     }
 
     public static function select(string $sql, string $types = '', array $parameters = [])
     {
         return self::preparedQuery($sql, $types, $parameters)->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public static function update_or_delete(string $sql, string $types = '', array $parameters = [])
+    {
+        self::preparedQuery($sql, $types, $parameters);
     }
 
 }

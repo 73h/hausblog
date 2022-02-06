@@ -19,20 +19,27 @@ class App
 
     public function index()
     {
+        console(now());
         echo $this->twig->render('index.html', ['foo' => 'bar']);
     }
 
     public function login()
     {
-        $auth = (object)[
-            "logged_in" => false,
-            "error_message" => null
-        ];
+        $message = '';
         if (isset($_POST['code'])) {
-            $code = $_POST['code'];
-            $auth->error_message = 'Error 73';
+            Auth::logInWithCode($_POST['code']);
+            if (!Auth::isLoggedIn()) $message = 'Das Code ist ungültig oder abgelaufen.';
+            else $_SESSION['auth']['pk_user'] = Auth::$pk_user;
+            header('Location: /login');
+            exit;
         }
-        echo $this->twig->render('login.html', ['auth' => $auth]);
+        echo $this->twig->render('login.html',
+            [
+                'login_state' => Auth::isLoggedIn(),
+                'user' => Auth::$user,
+                'messsage' => $message
+            ]
+        );
     }
 
     public function webhook(array $data)
