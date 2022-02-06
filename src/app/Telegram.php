@@ -51,6 +51,10 @@ class Telegram
             if (str_starts_with($text, '/login')) {
                 $code = Auth::createLoginCode();
                 $message = sprintf("Hallo %s \u{1F60D}\r\nHier ist Dein Anmeldecode: %s", Auth::$user, $code);
+                $message .= sprintf("\r\nLink: %s/login/%s", URL, $code);
+                $this->sendMessageToSender($message);
+            } elseif (str_starts_with($text, '/start')) {
+                $message = sprintf("Hallo %s \u{1F60D}\r\nSchön, von Du hier bist.", Auth::$user);
                 $this->sendMessageToSender($message);
             }
         }

@@ -1,13 +1,12 @@
 <?php
 
 session_start();
-session_destroy();
-session_start();
 
 use Dotenv\Dotenv;
 use src\app\Auth;
 
 Dotenv::createImmutable(BASE)->load();
+define("URL", (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST']);
 
 function now(): string
 {
