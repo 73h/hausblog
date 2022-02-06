@@ -5,12 +5,8 @@
     <form method="POST" action="/login">
         <h3>Login</h3>
         <p>
-            <label for="user">user</label><br>
-            <input type="text" placeholder="user" id="user" name="user" value="{{ auth.user }}">
-        </p>
-        <p>
-            <label for="password">password</label><br>
-            <input type="password" placeholder="password" id="password" name="password">
+            <label for="code">code</label><br>
+            <input type="password" placeholder="code" id="code" name="code">
         </p>
         {% if auth.error_message %}
         <p class="error">
@@ -23,7 +19,7 @@
     </form>
     {% endif %}
     {% if auth.logged_in %}
-    Hallo {{ auth.user }}.
+    <p>...</p>
     {% endif %}
 </div>
 {% endblock %}

@@ -13,7 +13,7 @@ Route::add('/login', function () {
     $app->login();
 }, ['get', 'post']);
 
-Route::add('/article/([a-z0-9-]+)', function ($article) {
+Route::add('/article/([a-z0-9-]+)', function (string $article) {
     $app = new App();
     $app->article($article);
 });

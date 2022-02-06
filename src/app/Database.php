@@ -30,12 +30,23 @@ class Database
         return self::$db->connection;
     }
 
-    public static function insert(string $sql, string $types = '', array $parameters = [])
+    public static function preparedQuery(string $sql, string $types = '', array $parameters = []): bool|\mysqli_stmt
     {
         $connection = Database::getConnection();
         $stmt = $connection->prepare($sql);
         $stmt->bind_param($types, ...$parameters);
         $stmt->execute();
+        return $stmt;
+    }
+
+    public static function insert(string $sql, string $types = '', array $parameters = [])
+    {
+        self::preparedQuery($sql, $types, $parameters);
+    }
+
+    public static function select(string $sql, string $types = '', array $parameters = [])
+    {
+        return self::preparedQuery($sql, $types, $parameters)->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
 }

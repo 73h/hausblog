@@ -2,7 +2,6 @@
 
 namespace src\app;
 
-use DateTime;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -20,50 +19,34 @@ class App
 
     public function index()
     {
-        exit($this->twig->render('index.html', ['name' => 'Heiko']));
+        echo $this->twig->render('index.html', ['foo' => 'bar']);
     }
 
     public function login()
     {
         $auth = (object)[
             "logged_in" => false,
-            "user" => null,
             "error_message" => null
         ];
-        $error = null;
-        if (isset($_POST['user']) && isset($_POST['password'])) {
-            $auth->user = $_POST['user'];
-            $password = $_POST['password'];
+        if (isset($_POST['code'])) {
+            $code = $_POST['code'];
             $auth->error_message = 'Error 73';
         }
-        exit($this->twig->render('login.html', ['auth' => $auth]));
+        echo $this->twig->render('login.html', ['auth' => $auth]);
     }
 
-    public function webhook($data)
+    public function webhook(array $data)
     {
-        $token = $_ENV['TELEGRAM_TOKEN'];
+        $from = $data['message']['from'];
+        $telegram = new Telegram($from['id'], $from['username']);
         if (array_key_exists('photo', $data['message'])) {
-            $photo = $data['message']['photo'][count($data['message']['photo']) - 1];
-            $url_image_data = 'https://api.telegram.org/bot' . $token . '/getFile?file_id=' . $photo['file_id'];
-            $image_data = json_decode(file_get_contents($url_image_data));
-            $url_image = 'https://api.telegram.org/file/bot' . $token . '/' . $image_data->result->file_path;
-            $type = preg_replace('/^.+\.([a-zA-Z]{2,6})$/', '$1', $image_data->result->file_path);
-            $title = uniqid();
-            $objDateTime = new DateTime('NOW');
-            $image = new Image();
-            $image->create(
-                name: $title . '.' . $type,
-                uploaded: $objDateTime->format('c'),
-                title: $title,
-                image: file_get_contents($url_image),
-                type: $type,
-                width: $photo['width'],
-                height: $photo['height']
-            );
+            $telegram->receiveImage($data['message']['photo']);
+        } elseif (array_key_exists('text', $data['message']) && array_key_exists('entities', $data['message'])) {
+            $telegram->receiveCommand($data['message']['text']);
         }
     }
 
-    public function article($article)
+    public function article(string $article)
     {
         echo htmlspecialchars($article);
     }
