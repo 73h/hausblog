@@ -8,7 +8,7 @@ if (in_array("QUERY_STRING", $_SERVER)) {
         $_GET[$get_var_pair[0]] = ($get_var_pair[1] ?? "");
     }
 }
-if (preg_match('/^\/?assets\/.+/', $uri)) {
+if (preg_match('/^\/?assets\/.+/', $uri) || preg_match('/\.ico/', $uri)) {
     return false;
 } else {
     chdir('www/');

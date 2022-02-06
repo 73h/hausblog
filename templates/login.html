@@ -2,24 +2,25 @@
 {% block content %}
 <div class="row">
     {% if not login_state %}
-    <form method="POST" action="/login">
-        <h3>Login</h3>
-        <p>
-            <label for="code">code</label><br>
-            <input type="password" placeholder="code" id="code" name="code">
-        </p>
-        {% if message %}
-        <p class="error">
-            {{ message }}
-        </p>
+    <article>
+        <form method="POST" action="/login">
+            <p>
+                <label for="code">Code</label><br>
+                <input type="password" placeholder="code" id="code" name="code">
+            </p>
+            {% if message %}
+            <p class="error">
+                {{ message }}
+            </p>
+            {% endif %}
+            <p>
+                <button type="submit">Anmelden</button>
+            </p>
+        </form>
         {% endif %}
-        <p>
-            <button type="submit">Login</button>
-        </p>
-    </form>
-    {% endif %}
-    {% if login_state %}
-    <p>Hallo {{ user }}.</p>
-    {% endif %}
+        {% if login_state %}
+        <p>Hallo {{ user }}.</p>
+        {% endif %}
+    </article>
 </div>
 {% endblock %}

@@ -33,3 +33,4 @@ jobs:
             README.md
             router.php
             composer.*
+            database.sql

@@ -5,7 +5,6 @@ namespace src\app;
 class Telegram
 {
 
-    private string $token;
     private int $id;
 
     function __construct(string $id, string $username)
@@ -50,8 +49,8 @@ class Telegram
         if (Auth::isLoggedIn()) {
             if (str_starts_with($text, '/login')) {
                 $code = Auth::createLoginCode();
-                $message = sprintf("Hallo %s \u{1F60D}\r\nHier ist Dein Anmeldecode: %s", Auth::$user, $code);
-                $message .= sprintf("\r\nLink: %s/login/%s", URL, $code);
+                $message = sprintf("Hallo %s \u{1F60D}\r\n\r\nHier ist Dein Anmeldecode: ```%s```", Auth::$user, $code);
+                $message .= sprintf("\r\n\r\n%s/login/%s", URL, $code);
                 $this->sendMessageToSender($message);
             } elseif (str_starts_with($text, '/start')) {
                 $message = sprintf("Hallo %s \u{1F60D}\r\nSchön, von Du hier bist.", Auth::$user);
@@ -70,7 +69,9 @@ class Telegram
         $url = Telegram::getApiUrl() . 'sendMessage';
         $data = array(
             'chat_id' => $chat_id,
-            'text' => $message
+            'text' => $message,
+            'parse_mode' => 'Markdown',
+            'disable_web_page_preview' => true
         );
         $options = array(
             'http' => array(

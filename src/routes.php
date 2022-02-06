@@ -14,10 +14,14 @@ Route::add('/login', function () {
 }, ['get', 'post']);
 
 Route::add('/login/([0-9]{6})', function ($code) {
-    console($_SERVER["REMOTE_ADDR"]);
-    console(gethostbyaddr($_SERVER["REMOTE_ADDR"]));
     $app = new App();
     $app->login($code);
+}, ['get']);
+
+Route::add('/logout', function () {
+    session_destroy();
+    header('Location: ' . URL);
+    exit;
 }, ['get']);
 
 Route::add('/article/([a-z0-9-]+)', function (string $article) {

@@ -1,35 +1,41 @@
 <!DOCTYPE html>
 <html xml:lang="de" lang="de">
 <head>
-    <title>title</title>
+    <title>{{ title }}</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <meta name="title" content="title"/>
-    <meta name="description" content="description"/>
+    <meta name="title" content="{{ title }}"/>
+    <meta name="description" content="{{ description }}"/>
     <meta name="robots" content="index, follow"/>
     <meta name="author" content="Heiko Schmidt"/>
     <meta name="date" content="2022-01-29"/>
     <meta name="language" content="de"/>
     <meta name="rights" lang="de" content="Alle Rechte liegen beim Autor"/>
-    <meta name="keywords" content="Heiko Schmidt, Development"/>
+    <meta name="keywords" content="Heiko Schmidt, Jesseka Lier, Haus, Hausbau, Traumhaus"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-    <meta property="og:title" content="title"/>
-    <meta property="og:site_name" content="title"/>
-    <meta property="og:url" content="url"/>
-    <meta property="og:description" content="description"/>
+    <meta property="og:title" content="{{ title }}"/>
+    <meta property="og:site_name" content="{{ title }}"/>
+    <meta property="og:url" content="{{ url }}"/>
+    <meta property="og:description" content="{{ description }}"/>
     <meta property="og:locale" content="de_DE"/>
+    <link rel="stylesheet" type="text/css" href="/assets/main.css{{ version }}" media="all"/>
 </head>
 <body>
 <header>
-
+    <div class="image"></div>
+    <div class="title">
+        <h1><a href="/">{{ title }}</a></h1>
+        <p>{{ subtitle }}</p>
+    </div>
 </header>
 <main>
     {% block content %}
     {% endblock %}
 </main>
 <footer>
-
+    <p><a href="/login">Login</a></p>
 </footer>
+<script type="text/javascript" src="/assets/main.js{{ version }}"></script>
 </body>
 </html>

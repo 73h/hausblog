@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+
+* {
+    font-family: 'Indie Flower', cursive;
+}
+
+body {
+    background: white;
+    margin: 0;
+}
+
+header .title, footer p, main article {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 900px;
+}
+
+header .title, footer, main .row {
+    padding: 2em 0;
+}
+
+main .row {
+    padding-bottom: 3em;
+}
+
+header, footer {
+    background-color: #32373B;
+    color: white;
+}
+
+footer a {
+    color: white;
+}
+
+h1 {
+    margin: 0;
+}
+
+h1 a {
+    color: white;
+    text-decoration: none;
+}
+
+header p {
+    font-size: 1.3em;
+    margin: 0;
+}
+
+header .image {
+    background-image: url(header.jpg);
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 24em;
+}
+
+.row:nth-child(even) {
+    background-color: #b6bbbf;
+}
+
+main article {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+main h2, main p {
+    margin: 0 0 .4em 0;
+}
+
+input, button, select, option, textarea {
+    font-size: 1.2em;
+    padding: .4em .6em;
+    margin-top: 0.5em;
+    border: solid 1px black;
+    background: white;
+    color: black;
+}
+
+button {
+    cursor: pointer;
+    background: black;
+    color: white;
+}
+
+button:hover {
+    background: white;
+    color: black;
+}
+
+@media only screen and (max-width: 900px) {
+
+    header .title, footer, main .row {
+        padding: 2em 1.5em;
+    }
+
+    main .row {
+        padding-bottom: 3em;
+    }
+
+}

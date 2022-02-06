@@ -17,9 +17,21 @@ class App
         $this->twig = new Environment($loader);
     }
 
+    private function render(string $site, string $subtitle, array $parameters = [])
+    {
+        $basic_parameters = [
+            'title' => 'Hausblog - Jessi & Heiko',
+            'subtitle' => $subtitle,
+            'description' => 'Wir bauen unser Traumhaus - Jessi & Heiko',
+            'url' => URL . $_SERVER['REQUEST_URI'],
+            'version' => '?v1'
+        ];
+        echo $this->twig->render($site . '.html', array_merge($basic_parameters, $parameters));
+    }
+
     public function index()
     {
-        echo $this->twig->render('index.html', ['foo' => 'bar']);
+        $this->render('index', 'Wir bauen unser Traumhaus.', ['foo' => 'bar']);
     }
 
     public function login(string $code = null)
@@ -34,7 +46,7 @@ class App
                 exit;
             }
         }
-        echo $this->twig->render('login.html',
+        $this->render('login', 'Login.',
             [
                 'login_state' => Auth::isLoggedIn(),
                 'user' => Auth::$user,
