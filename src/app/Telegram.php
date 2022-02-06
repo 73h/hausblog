@@ -53,7 +53,7 @@ class Telegram
                 $message .= sprintf("\r\n\r\n%s/login/%s", URL, $code);
                 $this->sendMessageToSender($message);
             } elseif (str_starts_with($text, '/start')) {
-                $message = sprintf("Hallo %s \u{1F60D}\r\nSchön, von Du hier bist.", Auth::$user);
+                $message = sprintf("Hallo %s \u{1F60D}\r\nSchön, dass Du hier bist.", Auth::$user);
                 $this->sendMessageToSender($message);
             }
         }
