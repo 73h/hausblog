@@ -77,6 +77,10 @@ class App
 
     public function image(int $pk_image, int $height)
     {
+        if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+            header('Last-Modified: ' . $_SERVER['HTTP_IF_MODIFIED_SINCE'], true, 304);
+            exit;
+        }
         $image = Images::getImage($pk_image);
         if ($image != null) {
             $width = $height * $image['width'] / $image['height'];
@@ -86,7 +90,9 @@ class App
             $y = imagesy($im);
             imagecopyresampled($new, $im, 0, 0, 0, 0, $width, $height, $x, $y) or exit("bad url");
             imagedestroy($im);
-            header("Cache-Control: max-age=2592000");
+            header("Cache-Control: private, max-age=31536000, pre-check=31536000");
+            header("Pragma: private");
+            header("Expires: " . date(DATE_RFC822, strtotime("1 year")));
             header("Content-type: image/jpeg");
             imagejpeg($new, null, 80) or exit("bad url");
         }
