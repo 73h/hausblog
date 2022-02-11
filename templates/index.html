@@ -3,11 +3,14 @@
 {% for article in articles %}
 <div class="row">
     <article>
-        <p class="created">{{ article.created }}</p>
+        <p class="created"><img
+                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAACTUlEQVRoge2ZPUscQRyHnwvGYBf9ALG0FmLAVwL5AsmXiI0a0AiijVj5BcTuuhi7FJFAouUpCoe1RZImd1baqCmUw7GYPRjHdWdudnbGg31git2Z/c3vv/O6s1BSUlLSDUwC20ATaAGioNQCGsBXYMKH8R5gs0DDprSReHAmpnk1CCcmNaHvwAjQ6ypoQW9Sx45W97iL2Db3zYfmm1L/FxeBpiLw2p8va94o9TdcBNTZpshu8xgvlPpbjxWqZAgIy3JFYvRgO0UJc5E4PIttIC9dH4BtF3oKYyCVrm+BMoDYuAYwCOwBV8Au8CqlzCfgNEmzjhq5UDdTOnta/i8tX98I3vJwf2/SAJgDhoCXvgO41PIvtPwFLV8A8x1qWOHahQ4N10fatUi5Z9J4DiwDJ8AN8AdYA/psTWa1wCCyyS+Bn6T331nkjrYJzHSo0Q/s87AVRXLfKoisAIqkH6iTbr6dVm2EYgRgY14Av23EQgdga14A1zaCIQPoxLxADmwjpkFsWoSmgb/I2eOjR/MCWMobgGkRGkMuXupCNurJfA05xeYKwMdC5mK+njxnRVYAu1q+3gJvUyqfCmneFIDNQrYInANnwOfQ5qGYY5Vg5sH/wVZQ8yCPuNtCeY8We4ADg1mv5kHu31XBHeRxn0t3+hDafJuNDivW07tEpxrDPMimdw3iP/J8s4L8rAxuXmUc2AL+Yf+L6Ufy7HBs83lZwWz+GBiIZdBEjWzzNZ7om2+j75sEckxUgffk/IkXgnXktruG/EgfJt5Za4l37gBG3w8vP+LUrgAAAABJRU5ErkJggg=="/>
+            {{ article.created }}</p>
         <h2>{{ article.title }}</h2>
         <p>{{ article.content }}</p>
         {% for image in article.images %}
-        <img src="{{ base_url }}/images/{{ image.pk_image }}/200.jpg" alt="{{ image.title }}" title="{{ image.title }}">
+        <img class="image" src="{{ base_url }}/images/{{ image.pk_image }}/200.jpg" alt="{{ image.title }}"
+             title="{{ image.title }}">
         {% endfor %}
     </article>
 </div>

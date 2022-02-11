@@ -85,18 +85,27 @@ main h2, main p {
     margin: 0 0 .4em 0;
 }
 
-main article img {
+main article .image {
     box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.29);
-    margin-right: .5em;
+    margin: .5em .5em 0 0;
     border: solid 0.01em white;
     box-sizing: border-box;
     border-radius: .5em;
-    height: 10em;
+    height: 8em;
+    width: 8em;
+    object-fit: cover;
     cursor: pointer;
+    transition: .5s;
 }
 
-main article .created {
+main article .image:hover {
+    border: solid 0.01em black;
+    transition: .5s;
+}
 
+main article .created img {
+    height: 1.2em;
+    margin-bottom: -.3em;
 }
 
 @media only screen and (max-width: 900px) {
@@ -107,6 +116,11 @@ main article .created {
 
     main .row {
         padding-bottom: 4em;
+    }
+
+    main article .image {
+        height: 6.5em;
+        width: 6.5em;
     }
 
 }
