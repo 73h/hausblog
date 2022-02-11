@@ -1,59 +1,51 @@
-CREATE TABLE `tbl_articles`
+create table tbl_articles
 (
-    `pk_article` int(11)       NOT NULL AUTO_INCREMENT,
-    `title`      varchar(1000) NOT NULL,
-    `content`    mediumtext    NOT NULL,
-    `created`    datetime      NOT NULL,
-    `url`        varchar(1000) NOT NULL,
-    `published`  tinyint(1)    NOT NULL DEFAULT 0,
-    PRIMARY KEY (`pk_article`)
-) ENGINE = MyISAM
-  DEFAULT CHARSET = utf8;
+    pk_article int auto_increment
+        primary key,
+    title      varchar(1000)        not null,
+    content    mediumtext           not null,
+    created    datetime             not null,
+    url        varchar(1000)        not null,
+    published  tinyint(1) default 0 not null
+);
 
-CREATE TABLE `tbl_images`
+create table tbl_articles_images
 (
-    `pk_image` int(11)      NOT NULL AUTO_INCREMENT,
-    `name`     varchar(255) NOT NULL,
-    `uploaded` datetime     NOT NULL,
-    `title`    varchar(255) NOT NULL,
-    `image`    blob         NOT NULL,
-    `type`     varchar(10)  NOT NULL,
-    `width`    int(11)      NOT NULL,
-    `height`   int(11)      NOT NULL,
-    PRIMARY KEY (`pk_image`)
-) ENGINE = MyISAM
-  AUTO_INCREMENT = 3
-  DEFAULT CHARSET = utf8;
+    pk_article_image int auto_increment
+        primary key,
+    fk_article       int not null,
+    fk_image         int not null
+);
 
-CREATE TABLE `tbl_articles_images`
+create table tbl_images
 (
-    `pk_article_image` int(11) NOT NULL AUTO_INCREMENT,
-    `fk_article`       int(11) NOT NULL,
-    `fk_image`         int(11) NOT NULL,
-    PRIMARY KEY (`pk_article_image`)
-) ENGINE = MyISAM
-  DEFAULT CHARSET = utf8;
+    pk_image int auto_increment
+        primary key,
+    name     varchar(255) not null,
+    uploaded datetime     not null,
+    title    varchar(255) not null,
+    image    blob         not null,
+    type     varchar(10)  not null,
+    width    int          not null,
+    height   int          not null
+);
 
-CREATE TABLE `tbl_logins`
+create table tbl_logins
 (
-    `pk_login` int(11)      NOT NULL AUTO_INCREMENT,
-    `fk_user`  int(11)      NOT NULL,
-    `created`  datetime     NOT NULL,
-    `code`     varchar(256) NOT NULL,
-    `used`     tinyint(1)   NOT NULL DEFAULT 0,
-    PRIMARY KEY (`pk_login`)
-) ENGINE = MyISAM
-  AUTO_INCREMENT = 38
-  DEFAULT CHARSET = utf8;
+    pk_login int auto_increment
+        primary key,
+    fk_user  int                  not null,
+    created  datetime             not null,
+    code     varchar(256)         not null,
+    used     tinyint(1) default 0 not null
+);
 
-CREATE TABLE `tbl_users`
+create table tbl_users
 (
-    `pk_user`           int(11)     NOT NULL AUTO_INCREMENT,
-    `user`              varchar(20) NOT NULL,
-    `email`             varchar(100) DEFAULT NULL,
-    `telegram_id`       int(11)      DEFAULT NULL,
-    `telegram_username` varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`pk_user`)
-) ENGINE = MyISAM
-  AUTO_INCREMENT = 3
-  DEFAULT CHARSET = utf8;
+    pk_user           int auto_increment
+        primary key,
+    user              varchar(20)  not null,
+    email             varchar(100) null,
+    telegram_id       int          null,
+    telegram_username varchar(255) null
+);

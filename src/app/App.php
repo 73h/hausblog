@@ -23,6 +23,7 @@ class App
             'title' => 'Hausblog - Jessi & Heiko',
             'subtitle' => $subtitle,
             'description' => 'Wir bauen unser Traumhaus - Jessi & Heiko',
+            'base_url' => URL,
             'url' => URL . $_SERVER['REQUEST_URI'],
             'version' => '?v1'
         ];
@@ -31,7 +32,8 @@ class App
 
     public function index()
     {
-        $this->render('index', 'Wir bauen unser Traumhaus.', ['foo' => 'bar']);
+        $articles = Arcticles::getArticles(0, 10);
+        $this->render('index', 'Wir bauen unser Traumhaus.', ['articles' => $articles]);
     }
 
     public function login(string $code = null)
@@ -70,7 +72,24 @@ class App
 
     public function article(string $article)
     {
-        echo htmlspecialchars($article);
+        console($article);
+    }
+
+    public function image(int $pk_image, int $height)
+    {
+        $image = Images::getImage($pk_image);
+        if ($image != null) {
+            $width = $height * $image['width'] / $image['height'];
+            $im = imagecreatefromstring($image['image']);
+            $new = imagecreatetruecolor($width, $height) or exit("bad url");
+            $x = imagesx($im);
+            $y = imagesy($im);
+            imagecopyresampled($new, $im, 0, 0, 0, 0, $width, $height, $x, $y) or exit("bad url");
+            imagedestroy($im);
+            header("Cache-Control: max-age=2592000");
+            header("Content-type: image/jpeg");
+            imagejpeg($new, null, 80) or exit("bad url");
+        }
     }
 
 }

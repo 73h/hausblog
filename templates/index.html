@@ -1,21 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
+{% for article in articles %}
 <div class="row">
     <article>
-        <h2>first title</h2>
-        <p>Nothing to see so far ..</p>
+        <p>{{ article.created }}</p>
+        <h2>{{ article.title }}</h2>
+        <p>{{ article.content }}</p>
+        {% for image in article.images %}
+        <img src="{{ base_url }}/images/{{ image.pk_image }}/200.jpg" alt="{{ image.title }}">
+        {% endfor %}
     </article>
 </div>
-<div class="row">
-    <article>
-        <h2>second title</h2>
-        <p>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-            dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-            clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-            consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-            sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no
-            sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-    </article>
-</div>
+{% endfor %}
 {% endblock %}

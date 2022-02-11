@@ -24,4 +24,16 @@ class Images
         Database::insert($sql, 'sssssii', $parameters);
     }
 
+    public static function getImage(int $pk_image): ?array
+    {
+        $sql = <<<EOD
+            select type, image, width, height
+            from tbl_images
+            where pk_image = ?
+        EOD;
+        $images = Database::select($sql, 'i', [$pk_image]);
+        if (count($images) == 1) return $images[0];
+        return null;
+    }
+
 }

@@ -29,6 +29,11 @@ Route::add('/article/([a-z0-9-]+)', function (string $article) {
     $app->article($article);
 }, ['get']);
 
+Route::add('/images/([0-9]+)/([0-9]+).jpg', function (int $pk_image, int $height) {
+    $app = new App();
+    $app->image($pk_image, $height);
+}, ['get']);
+
 Route::add('/webhook', function () {
     $data = json_decode(file_get_contents('php://input'), TRUE);
     $app = new App();
