@@ -2,6 +2,9 @@
 
 namespace src\app;
 
+use DateTime;
+use DateTimeZone;
+
 class Arcticles
 {
 
@@ -17,7 +20,9 @@ class Arcticles
         $articles = Database::select($sql, 'ii', [$offset, $row_count]);
         foreach ($articles as &$article) {
             $article['images'] = Arcticles::getArticleImages($article['pk_article']);
-
+            $date = new DateTime($article['created'], new DateTimeZone('UTC'));
+            $date->setTimezone(new DateTimeZone('Europe/Berlin'));
+            $article['created'] = $date->format('d.m.Y, H:i'); //date('d.m.Y, H:i', strtotime($article['created']));
         }
         return $articles;
     }

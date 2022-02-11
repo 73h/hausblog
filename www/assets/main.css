@@ -20,7 +20,8 @@ header .title, footer, main .row {
 }
 
 main .row {
-    padding-bottom: 3em;
+    padding-bottom: 4em;
+    background: linear-gradient(#ffffff, #d6dbdf);
 }
 
 header, footer {
@@ -54,20 +55,6 @@ header .image {
     height: 24em;
 }
 
-.row:nth-child(even) {
-    background-color: #b6bbbf;
-}
-
-main article {
-    margin-top: 0;
-    margin-bottom: 0;
-    padding: 0;
-}
-
-main h2, main p {
-    margin: 0 0 .4em 0;
-}
-
 input, button, select, option, textarea {
     font-size: 1.2em;
     padding: .4em .6em;
@@ -88,6 +75,30 @@ button:hover {
     color: black;
 }
 
+main article {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+main h2, main p {
+    margin: 0 0 .4em 0;
+}
+
+main article img {
+    box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.29);
+    margin-right: .5em;
+    border: solid 0.01em white;
+    box-sizing: border-box;
+    border-radius: .5em;
+    height: 10em;
+    cursor: pointer;
+}
+
+main article .created {
+
+}
+
 @media only screen and (max-width: 900px) {
 
     header .title, footer, main .row {
@@ -95,7 +106,7 @@ button:hover {
     }
 
     main .row {
-        padding-bottom: 3em;
+        padding-bottom: 4em;
     }
 
 }

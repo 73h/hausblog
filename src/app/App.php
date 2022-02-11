@@ -83,6 +83,7 @@ class App
         }
         $image = Images::getImage($pk_image);
         if ($image != null) {
+            if ($height > $image['height']) $height = $image['height'];
             $width = $height * $image['width'] / $image['height'];
             $im = imagecreatefromstring($image['image']);
             $new = imagecreatetruecolor($width, $height) or exit("bad url");
