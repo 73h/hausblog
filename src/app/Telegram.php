@@ -21,24 +21,33 @@ class Telegram
         return 'https://api.telegram.org/' . ($file ? 'file/' : '') . 'bot' . $_ENV['TELEGRAM_TOKEN'] . '/';
     }
 
-    public function receiveImage(array $photo_list)
+    private function getPhoto(array $photo): object
+    {
+        $url_photo_data = $this->getApiUrl() . 'getFile?file_id=' . $photo['file_id'];
+        $photo_data = json_decode(file_get_contents($url_photo_data));
+        $url_photo = $this->getApiUrl(true) . $photo_data->result->file_path;
+        $photo_type = preg_replace('/^.+\.([a-zA-Z]{2,6})$/', '$1', $photo_data->result->file_path);
+        return (object)[
+            'photo' => file_get_contents($url_photo),
+            'type' => $photo_type
+        ];
+    }
+
+    public function receivePhoto(array $photo_list)
     {
         if (Auth::isLoggedIn()) {
-            $photo = $photo_list[count($photo_list) - 1];
-            $url_image_data = $this->getApiUrl() . 'getFile?file_id=' . $photo['file_id'];
-            $image_data = json_decode(file_get_contents($url_image_data));
-            $url_image = $this->getApiUrl(true) . $image_data->result->file_path;
-            $type = preg_replace('/^.+\.([a-zA-Z]{2,6})$/', '$1', $image_data->result->file_path);
+            $photo = $this->getPhoto($photo_list[count($photo_list) - 1]);
+            $thumbnail = $this->getPhoto($photo_list[1]);
             $title = uniqid();
-            $image = new Images();
-            $image->insertImage(
-                name: $title . '.' . $type,
+            $image = new Photos();
+            $image->insertPhoto(
+                name: $title . '.' . $photo->type,
                 uploaded: now(),
                 title: $title,
-                image: file_get_contents($url_image),
-                type: $type,
-                width: $photo['width'],
-                height: $photo['height']
+                thumbnail: $thumbnail->photo,
+                thumbnail_type: $thumbnail->type,
+                photo: $photo->photo,
+                photo_type: $photo->type
             );
             $this->sendMessageToSender("Danke " . Auth::$user . ", das Bild hab ich gespeichert. \u{1F680}");
         }

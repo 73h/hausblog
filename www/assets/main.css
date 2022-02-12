@@ -85,7 +85,9 @@ main h2, main p {
     margin: 0 0 .4em 0;
 }
 
-main article .image {
+main article .photo {
+    background-color: white;
+    opacity: .1;
     box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.29);
     margin: .5em .5em 0 0;
     border: solid 0.01em white;
@@ -98,8 +100,14 @@ main article .image {
     transition: .5s;
 }
 
-main article .image:hover {
+main article .loaded {
+    opacity: 1;
+    transition: 1s;
+}
+
+main article .photo:hover {
     border: solid 0.01em black;
+    box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.49);
     transition: .5s;
 }
 
@@ -118,7 +126,7 @@ main article .created img {
         padding-bottom: 4em;
     }
 
-    main article .image {
+    main article .photo {
         height: 6.5em;
         width: 6.5em;
     }

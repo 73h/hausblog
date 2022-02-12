@@ -29,9 +29,10 @@ Route::add('/article/([a-z0-9-]+)', function (string $article) {
     $app->article($article);
 }, ['get']);
 
-Route::add('/images/([0-9]+)/([0-9]+).jpg', function (int $pk_image, int $height) {
+Route::add('/photos/([0-9]+)/(tn|p).[a-z]+', function (int $pk_image, string $type) {
+    $thumbnail = $type == 'tn';
     $app = new App();
-    $app->image($pk_image, $height);
+    $app->photo($pk_image, $thumbnail);
 }, ['get']);
 
 Route::add('/webhook', function () {

@@ -9,25 +9,12 @@ create table tbl_articles
     published  tinyint(1) default 0 not null
 );
 
-create table tbl_articles_images
+create table tbl_articles_photos
 (
-    pk_article_image int auto_increment
+    pk_article_photo int not null
         primary key,
     fk_article       int not null,
-    fk_image         int not null
-);
-
-create table tbl_images
-(
-    pk_image int auto_increment
-        primary key,
-    name     varchar(255) not null,
-    uploaded datetime     not null,
-    title    varchar(255) not null,
-    image    blob         not null,
-    type     varchar(10)  not null,
-    width    int          not null,
-    height   int          not null
+    fk_photo         int not null
 );
 
 create table tbl_logins
@@ -40,6 +27,19 @@ create table tbl_logins
     used     tinyint(1) default 0 not null
 );
 
+create table tbl_photos
+(
+    pk_photo       int auto_increment
+        primary key,
+    name           varchar(255) not null,
+    uploaded       datetime     not null,
+    title          varchar(255) not null,
+    thumbnail      mediumblob   not null,
+    thumbnail_type varchar(10)  not null,
+    photo          mediumblob   not null,
+    photo_type     varchar(10)  not null
+);
+
 create table tbl_users
 (
     pk_user           int auto_increment
@@ -49,3 +49,4 @@ create table tbl_users
     telegram_id       int          null,
     telegram_username varchar(255) null
 );
+

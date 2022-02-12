@@ -63,7 +63,7 @@ class App
             $from = $data['message']['from'];
             $telegram = new Telegram($from['id'], $from['username']);
             if (array_key_exists('photo', $data['message'])) {
-                $telegram->receiveImage($data['message']['photo']);
+                $telegram->receivePhoto($data['message']['photo']);
             } elseif (array_key_exists('text', $data['message']) && array_key_exists('entities', $data['message'])) {
                 $telegram->receiveCommand($data['message']['text']);
             }
@@ -75,28 +75,23 @@ class App
         console($article);
     }
 
-    public function image(int $pk_image, int $height)
+    public function photo(int $pk_photo, bool $thumbnail)
     {
         if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
             header('Last-Modified: ' . $_SERVER['HTTP_IF_MODIFIED_SINCE'], true, 304);
             exit;
         }
-        $image = Images::getImage($pk_image);
-        if ($image != null) {
-            if ($height > $image['height']) $height = $image['height'];
-            $width = $height * $image['width'] / $image['height'];
-            $im = imagecreatefromstring($image['image']);
-            $new = imagecreatetruecolor($width, $height) or exit("bad url");
-            $x = imagesx($im);
-            $y = imagesy($im);
-            imagecopyresampled($new, $im, 0, 0, 0, 0, $width, $height, $x, $y) or exit("bad url");
-            imagedestroy($im);
-            header("Cache-Control: private, max-age=31536000, pre-check=31536000");
-            header("Pragma: private");
-            header("Expires: " . date(DATE_RFC822, strtotime("1 year")));
-            header("Content-type: image/jpeg");
-            imagejpeg($new, null, 80) or exit("bad url");
-        }
+        $photo = Photos::getPhoto($pk_photo, $thumbnail);
+        header('Cache-Control: private, max-age=31536000, pre-check=31536000');
+        header('Pragma: private');
+        header('Expires: ' . date(DATE_RFC822, strtotime('1 year')));
+        header('Content-type: ' . match ($photo['type']) {
+                'gif' => 'image/gif',
+                'png' => 'image/png',
+                'svg' => 'image/svg+xml',
+                default => 'image/jpeg',
+            });
+        echo $photo['photo'];
     }
 
 }

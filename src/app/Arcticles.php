@@ -19,7 +19,7 @@ class Arcticles
         EOD;
         $articles = Database::select($sql, 'ii', [$offset, $row_count]);
         foreach ($articles as &$article) {
-            $article['images'] = Arcticles::getArticleImages($article['pk_article']);
+            $article['photos'] = Arcticles::getArticlePhotos($article['pk_article']);
             $date = new DateTime($article['created'], new DateTimeZone('UTC'));
             $date->setTimezone(new DateTimeZone('Europe/Berlin'));
             $article['created'] = $date->format('d.m.Y, H:i'); //date('d.m.Y, H:i', strtotime($article['created']));
@@ -27,12 +27,12 @@ class Arcticles
         return $articles;
     }
 
-    public static function getArticleImages(int $pk_article): array
+    public static function getArticlePhotos(int $pk_article): array
     {
         $sql = <<<EOD
-            select pk_image, title, type
-            from tbl_images
-            join tbl_articles_images on fk_image = pk_image
+            select pk_photo, title, thumbnail_type, photo_type
+            from tbl_photos
+            join tbl_articles_photos on fk_photo = pk_photo
             where fk_article = ?
             order by uploaded desc
         EOD;
