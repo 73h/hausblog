@@ -7,16 +7,6 @@ function setArticleEvents() {
         article.addEventListener("click", function () {
             loadPhotos(this);
         });
-        loadThumbnails(article);
-    });
-}
-
-function loadThumbnails(article) {
-    article.querySelectorAll(".photo").forEach(function (photo) {
-        photo.addEventListener("load", function () {
-            this.classList.add('loaded');
-        });
-        photo.src = photo.getAttribute("data-thumbnail");
     });
 }
 

@@ -87,7 +87,6 @@ main h2, main p {
 
 main article .photo {
     background-color: white;
-    opacity: .1;
     box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.29);
     margin: .5em .5em 0 0;
     border: solid 0.01em white;
@@ -98,11 +97,6 @@ main article .photo {
     object-fit: cover;
     cursor: pointer;
     transition: .5s;
-}
-
-main article .loaded {
-    opacity: 1;
-    transition: 1s;
 }
 
 main article .photo:hover {
