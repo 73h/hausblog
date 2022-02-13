@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <article>
+        <form method="POST" action="{{ url }}">
+            <p>
+                <label for="created">Erstellt</label><br>
+                <input type="datetime-local" id="created" name="created" value="{{ article.created }}">
+            </p>
+            <br>
+            <p>
+                <label for="title">Titel</label><br>
+                <input type="text" placeholder="Titel" id="title" name="title" value="{{ article.title }}"
+                       style="width:100%;">
+            </p>
+            <br>
+            <p>
+                <label for="content">Inhalt</label><br>
+                <textarea placeholder="Inhalt" id="content" name="content" rows="16"
+                          style="width:100%;">{{ article.content }}</textarea>
+            </p>
+            <br>
+            <p>
+                <label for="published">Online</label><br>
+                <input type="checkbox" id="published" name="published" {% if article.published== 1 %}checked{% endif %}>
+            </p>
+            {% if photos|length > 0 %}
+            <br>
+            <label>Fotos auswählen</label><br>
+            <div class="cms-photos">
+                <input type="hidden" id="photos" name="photos"
+                       value="{{ article.photos|column('pk_photo')|join(';') }}">
+                {% for photo in photos %}
+                <img class="cms-photo{% if photo.pk_photo in article.photos|column('pk_photo') %} cms-selected{% endif %}"
+                     src="{{ base_url }}/photos/{{ photo.pk_photo }}/tn.{{ photo.thumbnail_type }}"
+                     data-photo="{{ photo.pk_photo }}"/>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <br>
+            <p>
+                <button type="submit">Speichern</button>
+            </p>
+        </form>
+    </article>
+</div>
+{% endblock %}

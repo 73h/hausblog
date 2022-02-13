@@ -20,6 +20,7 @@ class App
     private function render(string $site, string $subtitle, array $parameters = [])
     {
         $basic_parameters = [
+            'login_state' => Auth::isLoggedIn(),
             'title' => 'Hausblog - Jessi & Heiko',
             'subtitle' => $subtitle,
             'description' => 'Der Weg in unser eigenes Haus.',
@@ -33,8 +34,8 @@ class App
     public function index(?int $page)
     {
         $offset = ($page != null ? $page : 0) * ROW_COUNT;
-        $articles_count = Arcticles::getArticlesCount();
-        $articles = Arcticles::getArticles($offset, ROW_COUNT);
+        $articles_count = Articles::getArticlesCount(Auth::isLoggedIn() ? 0 : 1);
+        $articles = Articles::getArticles($offset, ROW_COUNT, Auth::isLoggedIn() ? 0 : 1);
         $this->render('index', 'Der Weg in unser eigenes Haus.', [
             'articles' => $articles,
             'articles_count' => $articles_count,
@@ -58,7 +59,6 @@ class App
         }
         $this->render('login', 'Login.',
             [
-                'login_state' => Auth::isLoggedIn(),
                 'user' => Auth::$user,
                 'message' => $message
             ]
@@ -78,9 +78,11 @@ class App
         }
     }
 
-    public function article(string $article)
+    public function article(int $pk_article)
     {
-        console($article);
+        $article = Articles::getArticle($pk_article);
+        $photos = Photos::getPhotos();
+        $this->render('article', 'Eintrag bearbeiten.', ['article' => $article, 'photos' => $photos]);
     }
 
     public function photo(int $pk_photo, bool $thumbnail)

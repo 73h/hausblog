@@ -1,6 +1,7 @@
 <?php
 
 use src\app\App;
+use src\app\Auth;
 use Steampixel\Route;
 
 Route::add('/', function () {
@@ -24,10 +25,14 @@ Route::add('/logout', function () {
     exit;
 }, ['get']);
 
-Route::add('/article/([a-z0-9-]+)', function (string $article) {
+Route::add('/articles/([0-9]+)', function (int $pk_article) {
+    if (!Auth::isLoggedIn()) {
+        header('Location: ' . URL);
+        exit;
+    }
     $app = new App();
-    $app->article($article);
-}, ['get']);
+    $app->article($pk_article);
+}, ['get', 'post']);
 
 Route::add('/photos/([0-9]+)/(tn|p).[a-z]+', function (int $pk_image, string $type) {
     $thumbnail = $type == 'tn';

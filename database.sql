@@ -5,7 +5,6 @@ create table tbl_articles
     title      varchar(1000)        not null,
     content    mediumtext           not null,
     created    datetime             not null,
-    url        varchar(1000)        not null,
     published  tinyint(1) default 0 not null
 );
 

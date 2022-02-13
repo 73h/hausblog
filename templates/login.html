@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="row">
-    {% if not login_state %}
     <article>
+        {% if not login_state %}
         <form method="POST" action="/login">
             <p>
                 <label for="code">Code</label><br>
@@ -20,6 +20,9 @@
         {% endif %}
         {% if login_state %}
         <p>Hallo {{ user }}.</p>
+        <a href="/logout">
+            <button>Abmelden</button>
+        </a>
         {% endif %}
     </article>
 </div>

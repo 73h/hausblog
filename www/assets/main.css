@@ -145,3 +145,27 @@ main article .created img {
     }
 
 }
+
+.mt-1 {
+    margin-top: 1em;
+}
+
+main article .cms-photos {
+    margin-top: .5em;
+}
+
+main article .cms-photo {
+    background-color: white;
+    opacity: .4;
+    margin: .1em .1em 0 0;
+    height: 3em;
+    width: 3em;
+    object-fit: cover;
+    cursor: pointer;
+    border: solid 0.01em white;
+}
+
+main article .cms-selected {
+    opacity: 1;
+    border: solid 0.01em black;
+}

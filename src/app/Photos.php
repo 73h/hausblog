@@ -40,4 +40,10 @@ class Photos
         return null;
     }
 
+    public static function getPhotos(): array
+    {
+        $sql = "select pk_photo, name, uploaded, title, thumbnail_type from tbl_photos order by uploaded desc";
+        return Database::select($sql);
+    }
+
 }

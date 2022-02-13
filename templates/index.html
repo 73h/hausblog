@@ -29,6 +29,13 @@
             {% endfor %}
         </div>
         {% endif %}
+        {% if login_state %}
+        <p class="mt-1">
+            <a href="/articles/{{ article.pk_article }}">
+                <button>Bearbeiten</button>
+            </a>
+        </p>
+        {% endif %}
     </article>
 </div>
 {% endfor %}
