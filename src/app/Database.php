@@ -30,11 +30,11 @@ class Database
         return self::$db->connection;
     }
 
-    public static function preparedQuery(string $sql, string $types = '', array $parameters = []): bool|\mysqli_stmt
+    public static function preparedQuery(string $sql, string $types = null, array $parameters = []): bool|\mysqli_stmt
     {
         $connection = Database::getConnection();
         $stmt = $connection->prepare($sql);
-        $stmt->bind_param($types, ...$parameters);
+        if ($types != null) $stmt->bind_param($types, ...$parameters);
         $stmt->execute();
         return $stmt;
     }

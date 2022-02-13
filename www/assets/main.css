@@ -9,13 +9,13 @@ body {
     margin: 0;
 }
 
-header .title, footer p, main article {
+header .header-content, footer .footer-content, main article, nav .nav {
     margin-left: auto;
     margin-right: auto;
     max-width: 900px;
 }
 
-header .title, footer, main .row {
+header .header-content, footer .footer-content, main .row, nav .nav {
     padding: 2em 0;
 }
 
@@ -24,12 +24,17 @@ main .row {
     background: linear-gradient(#ffffff, #d6dbdf);
 }
 
+nav {
+    background-color: #969b9f;
+    color: white;
+}
+
 header, footer {
     background-color: #32373B;
     color: white;
 }
 
-footer a {
+footer a, nav a {
     color: white;
 }
 
@@ -110,20 +115,9 @@ main article .created img {
     margin-bottom: -.3em;
 }
 
-main article .like {
-    margin-top: 1em;
-    opacity: .8;
-    font-size: 1.2em;
-    cursor: pointer;
-}
-
-main article .like img {
-    margin-bottom: -.4em;
-}
-
 @media only screen and (max-width: 900px) {
 
-    header .title, footer, main .row {
+    header .header-content, footer .footer-content, main .row, nav .nav {
         padding: 2em 1.5em;
     }
 

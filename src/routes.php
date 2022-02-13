@@ -5,7 +5,7 @@ use Steampixel\Route;
 
 Route::add('/', function () {
     $app = new App();
-    $app->index();
+    $app->index($_GET['page'] ?? null);
 }, ['get']);
 
 Route::add('/login', function () {

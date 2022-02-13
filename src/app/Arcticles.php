@@ -8,6 +8,13 @@ use DateTimeZone;
 class Arcticles
 {
 
+    public static function getArticlesCount(): int
+    {
+        $sql = "select count(*) as count from tbl_articles where published = 1";
+        $articles_count = Database::select($sql);
+        return $articles_count[0]['count'];
+    }
+
     public static function getArticles(int $offset, int $row_count): array
     {
         $sql = <<<EOD

@@ -1,4 +1,15 @@
 {% extends "base.html" %}
+{% block navigation %}
+<div class="nav">
+    Einträge {{ from }} bis {{ to }} von {{ articles_count }}
+    {% if from > 1 %}
+    : <a href="?page={{ page-1 }}">vorherige Seite</a>
+    {% endif %}
+    {% if to < articles_count %}
+    : <a href="?page={{ page+1 }}">nächste Seite</a>
+    {% endif %}
+</div>
+{% endblock %}
 {% block content %}
 {% for article in articles %}
 <div class="row">
@@ -15,10 +26,6 @@
                  src="{{ base_url }}/photos/{{ photo.pk_photo }}/tn.{{ photo.thumbnail_type }}"
                  data-photo="{{ base_url }}/photos/{{ photo.pk_photo }}/p.{{ photo.photo_type }}"/>
             {% endfor %}
-        </p>
-        <p class="like">
-            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAABmJLR0QA/wD/AP+gvaeTAAABoElEQVRIie2VvS8EURTFf2uTld0VhaCQIBQaYhFRrY5EIxv/BgUqrUpHI9EplEJoROKj8RcoVJtYCQnxtUR8NVjFnJd5u5mdHYxC4iQ3M3PvuefMvMy7D/7xTUQr1OuBBPASgBcHXr9i3gwsAVdAQXEOzAJJi5dU7sLiXQKLQFMlkzSQtxrvSp6zQIcia+Xz4prna2CgnEkjcCPiFtBp1YaBY9XOFAXlhixel3rN19V5Gc2JsANUedRrgAPrrfeVK0UVsCvOrJfRkYppr6JQC+xJKOHDG5TWoVfxSUU/gaBISuvRJOwlMvfxEIyMRsTLKKdrdwhGqRLNIqMNXSdCMBov0SxCA84E+ADGfmAyKo1nnInhiWncjZoqR/JBD3AvjUk/YgRYE/EW6P+CST/uFFnF+hHKIQZsquEJyAQwGQEe1LMNVAd9uxiwosY3YMqHOyVOQT2xoCY2ZoB3iSxQvBwRYF61d3F/hAzODi8AyzhnWFT3ZvcHWd5A6MM9d9YV5pzqDcvEoBU4wZ3eOaAlbBODduBU0fZbJgZxwhm8fxyfIB1wvohVA9cAAAAASUVORK5CYII="
-                 alt="like"/> 0
         </p>
     </article>
 </div>

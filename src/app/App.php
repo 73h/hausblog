@@ -22,7 +22,7 @@ class App
         $basic_parameters = [
             'title' => 'Hausblog - Jessi & Heiko',
             'subtitle' => $subtitle,
-            'description' => 'Wir bauen unser Traumhaus - Jessi & Heiko',
+            'description' => 'Der Weg in unser eigenes Haus.',
             'base_url' => URL,
             'url' => URL . $_SERVER['REQUEST_URI'],
             'version' => '?v1'
@@ -30,10 +30,18 @@ class App
         echo $this->twig->render($site . '.html', array_merge($basic_parameters, $parameters));
     }
 
-    public function index()
+    public function index(?int $page)
     {
-        $articles = Arcticles::getArticles(0, 10);
-        $this->render('index', 'Wir bauen unser Traumhaus.', ['articles' => $articles]);
+        $offset = ($page != null ? $page : 0) * ROW_COUNT;
+        $articles_count = Arcticles::getArticlesCount();
+        $articles = Arcticles::getArticles($offset, ROW_COUNT);
+        $this->render('index', 'Der Weg in unser eigenes Haus.', [
+            'articles' => $articles,
+            'articles_count' => $articles_count,
+            'page' => $page,
+            'from' => $offset + 1,
+            'to' => (ROW_COUNT * ($offset + 1) > $articles_count ? $articles_count : ROW_COUNT * ($offset + 1))
+        ]);
     }
 
     public function login(string $code = null)

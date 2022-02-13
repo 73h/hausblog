@@ -24,20 +24,31 @@
 <body>
 <header>
     <div class="image"></div>
-    <div class="title">
-        <h1><a href="/">{{ title }}</a></h1>
-        <p>{{ subtitle }}</p>
+    <div class="header-content">
+        <div class="title">
+            <h1><a href="/">{{ title }}</a></h1>
+            <p>{{ subtitle }}</p>
+        </div>
     </div>
 </header>
+<nav class="header-nav">
+    {% block navigation %}
+    {% endblock %}
+</nav>
 <main>
     {% block content %}
     {% endblock %}
 </main>
+<nav class="footer-nav">
+    {{ block('navigation') }}
+</nav>
 <footer>
-    <p>
-        <a href="/login">Login</a> :
-        <a href="https://icons8.com" target="_blank">Icons by Icons8</a>
-    </p>
+    <div class="footer-content">
+        <div class="meta-nav">
+            <a href="/login">Login</a> :
+            <a href="https://icons8.com" target="_blank">Icons by Icons8</a>
+        </div>
+    </div>
 </footer>
 <script type="text/javascript" src="/assets/main.js{{ version }}"></script>
 </body>
