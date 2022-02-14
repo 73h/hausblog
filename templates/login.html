@@ -2,7 +2,6 @@
 {% block content %}
 <div class="row">
     <article>
-        {% if not login_state %}
         <form method="POST" action="/login">
             <p>
                 <label for="code">Code</label><br>
@@ -17,13 +16,6 @@
                 <button type="submit">Anmelden</button>
             </p>
         </form>
-        {% endif %}
-        {% if login_state %}
-        <p>Hallo {{ user }}.</p>
-        <a href="/logout">
-            <button>Abmelden</button>
-        </a>
-        {% endif %}
     </article>
 </div>
 {% endblock %}

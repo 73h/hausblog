@@ -1,0 +1,56 @@
+.cms .tr, .cms .sub-nav {
+    display: flex;
+}
+
+.cms .tr:nth-child(even) {
+    background-color: #d6dbdf;
+}
+
+.cms .table-head {
+    background-color: #969b9f !important;
+    color: white;
+}
+
+.cms .td {
+    width: 25%;
+    padding: .4em .6em;
+}
+
+.cms .td img {
+    height: 3em;
+    width: 3em;
+    object-fit: cover;
+}
+
+.cms .td-nav {
+    margin-right: 1em;
+}
+
+.cms .td-nav a {
+    margin-right: 1em;
+    color: black;
+}
+
+.cms .tr .active {
+    font-weight: bold;
+}
+
+main article .cms-photos {
+    margin-top: .5em;
+}
+
+main article .cms-photo {
+    background-color: white;
+    opacity: .4;
+    margin: .1em .1em 0 0;
+    height: 3em;
+    width: 3em;
+    object-fit: cover;
+    cursor: pointer;
+    border: solid 0.01em white;
+}
+
+main article .cms-selected {
+    opacity: 1;
+    border: solid 0.01em black;
+}

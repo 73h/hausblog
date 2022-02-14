@@ -9,9 +9,16 @@ Dotenv::createImmutable(BASE)->load();
 define("URL", (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST']);
 const ROW_COUNT = 10;
 
-function now(): string
+function now(): DateTime
 {
-    return (new DateTime('NOW'))->format('c');
+    return new DateTime('NOW', new DateTimeZone('UTC'));
+}
+
+function now_cet(): DateTime
+{
+    $date = new DateTime('NOW', new DateTimeZone('UTC'));
+    $date->setTimezone(new DateTimeZone('Europe/Berlin'));
+    return $date;
 }
 
 function console(mixed $mixed)

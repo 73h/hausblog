@@ -20,6 +20,9 @@
     <meta property="og:description" content="{{ description }}"/>
     <meta property="og:locale" content="de_DE"/>
     <link rel="stylesheet" type="text/css" href="/assets/main.css{{ version }}" media="all"/>
+    {% if login_state %}
+    <link rel="stylesheet" type="text/css" href="/assets/cms.css{{ version }}" media="all"/>
+    {% endif %}
 </head>
 <body>
 <header>
@@ -45,11 +48,20 @@
 <footer>
     <div class="footer-content">
         <div class="meta-nav">
+            {% if not login_state %}
             <a href="/login">Login</a> :
+            {% endif %}
+            {% if login_state %}
+            <a href="/cms">Redaktion</a> :
+            <a href="/logout">Logout</a> :
+            {% endif %}
             <a href="https://icons8.com" target="_blank">Icons by Icons8</a>
         </div>
     </div>
 </footer>
 <script type="text/javascript" src="/assets/main.js{{ version }}"></script>
+{% if login_state %}
+<script type="text/javascript" src="/assets/cms.js{{ version }}"></script>
+{% endif %}
 </body>
 </html>

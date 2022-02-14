@@ -41,8 +41,7 @@ class Telegram
             $title = uniqid();
             $image = new Photos();
             $image->insertPhoto(
-                name: $title . '.' . $photo->type,
-                uploaded: now(),
+                uploaded: now()->format('c'),
                 title: $title,
                 thumbnail: $thumbnail->photo,
                 thumbnail_type: $thumbnail->type,

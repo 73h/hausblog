@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <article class="cms">
+        <div class="tr mb-1">
+            <div class="td-nav{{ cmsnav == 1 ? ' active':'' }}"><a href="/cms/articles">Einträge bearbeiten</a></div>
+            <div class="td-nav{{ cmsnav == 2 ? ' active':'' }}"><a href="/cms/photos">Fotos bearbeiten</a></div>
+        </div>
+        {% block cms_content %}
+        {% endblock %}
+    </article>
+</div>
+{% endblock %}

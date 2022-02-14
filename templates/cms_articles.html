@@ -1,0 +1,25 @@
+{% extends "cms.html" %}
+{% block cms_content %}
+<p class="mb-1">
+    <a href="/cms/articles/new">
+        <button>+ neuer Eintrag</button>
+    </a>
+</p>
+<div class="tr table-head">
+    <div class="td">Erstellt</div>
+    <div class="td">Titel</div>
+    <div class="td">Öffentlich</div>
+    <div class="td">Aktionen</div>
+</div>
+{% for article in articles %}
+<div class="tr">
+    <div class="td">{{ article.created }} Uhr</div>
+    <div class="td">{{ article.title }}</div>
+    <div class="td">{{ article.published ? 'Ja':'Nein' }}</div>
+    <div class="td">
+        <a href="/cms/articles/{{ article.pk_article }}">bearbeiten</a>
+        <a href="javascript:if(confirm('Eintrag wirklich löschen?')){window.location.href='/cms/articles/{{ article.pk_article }}/delete';}">löschen</a>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

@@ -4,6 +4,14 @@ use src\app\App;
 use src\app\Auth;
 use Steampixel\Route;
 
+function redirectWhenNotAuth()
+{
+    if (!Auth::isLoggedIn()) {
+        header('Location: ' . URL);
+        exit;
+    }
+}
+
 Route::add('/', function () {
     $app = new App();
     $app->index($_GET['page'] ?? null);
@@ -19,20 +27,65 @@ Route::add('/login/([0-9]{6})', function ($code) {
     $app->login($code);
 }, ['get']);
 
+Route::add('/cms', function () {
+    header('Location: /cms/articles');
+    exit;
+}, ['get']);
+
+Route::add('/cms/articles', function () {
+    if (Auth::isLoggedIn()) {
+        $app = new App();
+        $app->cms_articles();
+    }
+}, ['get']);
+
+Route::add('/cms/articles/([0-9]+)', function (int $pk_article) {
+    if (Auth::isLoggedIn()) {
+        $app = new App();
+        $app->cms_article($pk_article);
+    }
+}, ['get', 'post']);
+
+Route::add('/cms/articles/([0-9]+)/delete', function (int $pk_article) {
+    if (Auth::isLoggedIn()) {
+        $app = new App();
+        $app->cms_article_delete($pk_article);
+    }
+}, ['get']);
+
+Route::add('/cms/articles/new', function () {
+    if (Auth::isLoggedIn()) {
+        $app = new App();
+        $app->cms_article(null);
+    }
+}, ['get', 'post']);
+
+Route::add('/cms/photos', function () {
+    if (Auth::isLoggedIn()) {
+        $app = new App();
+        $app->cms_photos();
+    }
+}, ['get']);
+
+Route::add('/cms/photos/([0-9]+)', function (int $pk_photo) {
+    if (Auth::isLoggedIn()) {
+        $app = new App();
+        $app->cms_photo($pk_photo);
+    }
+}, ['get', 'post']);
+
+Route::add('/cms/photos/([0-9]+)/delete', function (int $pk_photo) {
+    if (Auth::isLoggedIn()) {
+        $app = new App();
+        $app->cms_photo_delete($pk_photo);
+    }
+}, ['get']);
+
 Route::add('/logout', function () {
     session_destroy();
     header('Location: ' . URL);
     exit;
 }, ['get']);
-
-Route::add('/articles/([0-9]+)', function (int $pk_article) {
-    if (!Auth::isLoggedIn()) {
-        header('Location: ' . URL);
-        exit;
-    }
-    $app = new App();
-    $app->article($pk_article);
-}, ['get', 'post']);
 
 Route::add('/photos/([0-9]+)/(tn|p).[a-z]+', function (int $pk_image, string $type) {
     $thumbnail = $type == 'tn';

@@ -37,9 +37,18 @@
                 {% endfor %}
             </div>
             {% endif %}
+            {% if message %}
+            <br>
+            <p class="error">
+                {{ message }}
+            </p>
+            {% endif %}
             <br>
             <p>
                 <button type="submit">Speichern</button>
+                <a href="/cms/articles">
+                    <button type="button">Zurück</button>
+                </a>
             </p>
         </form>
     </article>

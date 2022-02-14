@@ -10,7 +10,7 @@ create table tbl_articles
 
 create table tbl_articles_photos
 (
-    pk_article_photo int not null
+    pk_article_photo int auto_increment
         primary key,
     fk_article       int not null,
     fk_photo         int not null
@@ -30,7 +30,6 @@ create table tbl_photos
 (
     pk_photo       int auto_increment
         primary key,
-    name           varchar(255) not null,
     uploaded       datetime     not null,
     title          varchar(255) not null,
     thumbnail      mediumblob   not null,

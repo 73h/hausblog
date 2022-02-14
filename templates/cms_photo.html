@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <article>
+        <form method="POST" action="{{ url }}">
+            <br>
+            <p>
+                <label for="title">Titel</label><br>
+                <input type="text" placeholder="Titel" id="title" name="title" value="{{ photo.title }}"
+                       style="width:100%;">
+            </p>
+            <br>
+            <p>
+                <img src="{{ base_url }}/photos/{{ photo.pk_photo }}/tn.{{ photo.thumbnail_type }}"/>
+            </p>
+            {% if message %}
+            <br>
+            <p class="error">
+                {{ message }}
+            </p>
+            {% endif %}
+            <br>
+            <p>
+                <button type="submit">Speichern</button>
+                <a href="/cms/photos">
+                    <button type="button">Zurück</button>
+                </a>
+            </p>
+        </form>
+    </article>
+</div>
+{% endblock %}

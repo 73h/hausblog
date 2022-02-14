@@ -1,0 +1,20 @@
+{% extends "cms.html" %}
+{% block cms_content %}
+<div class="tr table-head">
+    <div class="td">Erstellt</div>
+    <div class="td">Titel</div>
+    <div class="td">Thumbnail</div>
+    <div class="td">Aktionen</div>
+</div>
+{% for photo in photos %}
+<div class="tr">
+    <div class="td">{{ photo.uploaded }} Uhr</div>
+    <div class="td">{{ photo.title }}</div>
+    <div class="td"><img src="{{ base_url }}/photos/{{ photo.pk_photo }}/tn.{{ photo.thumbnail_type }}"/></div>
+    <div class="td">
+        <a href="/cms/photos/{{ photo.pk_photo }}">bearbeiten</a>
+        <a href="javascript:if(confirm('Foto wirklich löschen?')){window.location.href='/cms/photos/{{ photo.pk_photo }}/delete';}">löschen</a>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
