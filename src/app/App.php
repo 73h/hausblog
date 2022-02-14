@@ -115,7 +115,7 @@ class App
         if (isset($_POST) && count($_POST) > 0) {
             $photos = [];
             foreach (explode(';', $_POST['photos']) as $pk_photo) {
-                array_push($photos, ['pk_photo' => $pk_photo]);
+                array_push($photos, ['pk_photo' => intval($pk_photo)]);
             }
             $article['created'] = $_POST['created'];
             $article['title'] = $_POST['title'];
