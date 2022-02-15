@@ -54,7 +54,8 @@ class App
             'articles_count' => $articles_count,
             'page' => $page,
             'from' => $offset + 1,
-            'to' => (ROW_COUNT * ($offset + 1) > $articles_count ? $articles_count : ROW_COUNT * ($offset + 1))
+            'to' => (($offset + ROW_COUNT) > $articles_count ? $articles_count : ($offset + ROW_COUNT)),
+            'ROW_COUNT' => ROW_COUNT
         ]);
     }
 

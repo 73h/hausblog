@@ -90,6 +90,10 @@ main h2, main p {
     margin: 0 0 .4em 0;
 }
 
+main article .photos {
+    position: relative;
+}
+
 main article .photo {
     background-color: white;
     box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.29);
@@ -190,10 +194,29 @@ main article .created img {
         opacity: 1;
     }
     100% {
-        top: 0px;
-        left: 0px;
+        top: 0;
+        left: 0;
         width: 72px;
         height: 72px;
         opacity: 0;
     }
+}
+
+.photo-gallery-left, .photo-gallery-right {
+    position: absolute;
+    z-index: 2;
+    opacity: .5;
+    cursor: pointer;
+}
+
+.photo-gallery-left:hover, .photo-gallery-right:hover {
+    opacity: 1;
+}
+
+.photo-gallery-left {
+    left: 1em;
+}
+
+.photo-gallery-right {
+    right: 1em;
 }
