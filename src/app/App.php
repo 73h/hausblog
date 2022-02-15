@@ -39,7 +39,7 @@ class App
             'description' => 'Der Weg in unser eigenes Haus.',
             'base_url' => URL,
             'url' => URL . $_SERVER['REQUEST_URI'],
-            'version' => '?v2'
+            'version' => '?v3'
         ];
         echo $this->twig->render($site . '.html', array_merge($basic_parameters, $parameters));
     }
