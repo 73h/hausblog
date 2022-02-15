@@ -9,7 +9,6 @@ window.addEventListener("DOMContentLoaded", function () {
 function setArticleEvents() {
     document.querySelectorAll("main article .photos").forEach(function (article) {
         article.addEventListener("click", function (e) {
-            console.log(e);
             if (gallery != null) closePhotoGallery(gallery);
             if (gallery !== this) {
                 gallery = this;
@@ -40,10 +39,10 @@ function openPhotoGallery(div_photos) {
     lds_ripple.style.visibility = 'hidden';
     div_photos.classList.add('show');
     div_photos.style.height = div_photos.offsetWidth + 'px';
+    div_photos.scrollIntoView();
 }
 
 function closePhotoGallery(div_photos) {
     div_photos.classList.remove('show');
     div_photos.style.height = null;
 }
-
