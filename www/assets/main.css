@@ -4,6 +4,10 @@
     font-family: 'Indie Flower', cursive;
 }
 
+a:hover {
+    opacity: .7;
+}
+
 body {
     background: white;
     margin: 0;

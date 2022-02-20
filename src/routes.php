@@ -33,52 +33,45 @@ Route::add('/cms', function () {
 }, ['get']);
 
 Route::add('/cms/articles', function () {
-    if (Auth::isLoggedIn()) {
-        $app = new App();
-        $app->cms_articles();
-    }
+    redirectWhenNotAuth();
+    $app = new App();
+    $app->cms_articles();
 }, ['get']);
 
 Route::add('/cms/articles/([0-9]+)', function (int $pk_article) {
-    if (Auth::isLoggedIn()) {
-        $app = new App();
-        $app->cms_article($pk_article);
-    }
+    redirectWhenNotAuth();
+    $app = new App();
+    $app->cms_article($pk_article);
 }, ['get', 'post']);
 
 Route::add('/cms/articles/([0-9]+)/delete', function (int $pk_article) {
-    if (Auth::isLoggedIn()) {
-        $app = new App();
-        $app->cms_article_delete($pk_article);
-    }
+    redirectWhenNotAuth();
+    $app = new App();
+    $app->cms_article_delete($pk_article);
 }, ['get']);
 
 Route::add('/cms/articles/new', function () {
-    if (Auth::isLoggedIn()) {
-        $app = new App();
-        $app->cms_article(null);
-    }
+    redirectWhenNotAuth();
+    $app = new App();
+    $app->cms_article(null);
 }, ['get', 'post']);
 
 Route::add('/cms/photos', function () {
-    if (Auth::isLoggedIn()) {
-        $app = new App();
-        $app->cms_photos();
-    }
+    redirectWhenNotAuth();
+    $app = new App();
+    $app->cms_photos();
 }, ['get']);
 
 Route::add('/cms/photos/([0-9]+)', function (int $pk_photo) {
-    if (Auth::isLoggedIn()) {
-        $app = new App();
-        $app->cms_photo($pk_photo);
-    }
+    redirectWhenNotAuth();
+    $app = new App();
+    $app->cms_photo($pk_photo);
 }, ['get', 'post']);
 
 Route::add('/cms/photos/([0-9]+)/delete', function (int $pk_photo) {
-    if (Auth::isLoggedIn()) {
-        $app = new App();
-        $app->cms_photo_delete($pk_photo);
-    }
+    redirectWhenNotAuth();
+    $app = new App();
+    $app->cms_photo_delete($pk_photo);
 }, ['get']);
 
 Route::add('/logout', function () {
