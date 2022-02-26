@@ -13,7 +13,7 @@
     <meta name="keywords" content="Heiko Schmidt, Jesseka Lier, Haus, Hausbau, Traumhaus"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
     <meta property="og:title" content="{{ title }}"/>
     <meta property="og:site_name" content="{{ title }}"/>
     <meta property="og:url" content="{{ url }}"/>
@@ -66,9 +66,9 @@
     <div></div>
     <div></div>
 </div>
-<script type="text/javascript" src="/assets/main.js{{ version }}"></script>
+<script src="/assets/main.js{{ version }}"></script>
 {% if login_state %}
-<script type="text/javascript" src="/assets/cms.js{{ version }}"></script>
+<script src="/assets/cms.js{{ version }}"></script>
 {% endif %}
 </body>
 </html>

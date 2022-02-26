@@ -3,7 +3,7 @@
         alt="erstellt"/>
     {{ article.created }}</p>
 <h2><a href="/articles/{{ article.pk_article }}">{{ article.title }}</a></h2>
-<p>{{ article.content|markdown_to_html }}</p>
+{{ article.content|markdown_to_html }}
 {% if article.photos|length > 0 %}
 <div class="photos">
     {% for photo in article.photos %}

@@ -51,7 +51,7 @@ class Articles
     {
         $emoticons = Articles::getEmoticons();
         foreach ($emoticons as $emoticon) {
-            $content = str_replace($emoticon, '<img src="assets/icons/icons8-' . $emoticon . '-48.png" class="emoticon">', $content);
+            $content = str_replace($emoticon, '<img src="assets/icons/icons8-' . $emoticon . '-48.png" class="emoticon" alt="' . $emoticon . '">', $content);
         }
         return $content;
     }
