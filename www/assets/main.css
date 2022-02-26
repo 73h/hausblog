@@ -35,16 +35,24 @@ nav .nav {
 main .row {
     padding-top: 3em;
     padding-bottom: 5em;
-    background: linear-gradient(#ffffff, #d6dbdf);
+    background: linear-gradient(#ffffff 60%, #e6ebef);
+    border-bottom: solid 0.01em #c6cbcf;
 }
 
 nav {
-    background-color: #969b9f;
+    background: linear-gradient(#969b9f 50%, #868b8f);
+    border-bottom: solid 0.01em #666b6f;
     color: white;
 }
 
-header, footer {
-    background-color: #32373B;
+header {
+    background: linear-gradient(#42474B 70%, #32373B);
+    border-bottom: solid 0.01em #12171B;
+    color: white;
+}
+
+footer {
+    background: #32373B;
     color: white;
 }
 
