@@ -223,3 +223,7 @@ main article .created img {
 .photo-gallery-right {
     right: 1em;
 }
+
+.emoticon {
+    margin: -6px -6px;
+}

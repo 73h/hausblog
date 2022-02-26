@@ -72,3 +72,7 @@ main article .cms-selected {
     opacity: 1;
     border: solid 0.01em black;
 }
+
+.cms-form textarea, .cms-form input {
+    font-family: monospace;
+}

@@ -2,7 +2,7 @@
 {% block content %}
 <div class="row">
     <article>
-        <form method="POST" action="{{ url }}">
+        <form method="POST" action="{{ url }}" class="cms-form">
             <p>
                 <label for="created">Erstellt</label><br>
                 <input type="datetime-local" id="created" name="created" value="{{ article.created }}">
@@ -19,7 +19,10 @@
                 <textarea placeholder="Inhalt" id="content" name="content" rows="16"
                           style="width:90%;">{{ article.content }}</textarea>
             </p>
-            <br>
+            {% for emoticon in emoticons %}
+            <img src="/assets/icons/icons8-{{ emoticon }}-48.png" class="emoticon" data-emoticon="{{ emoticon }}">
+            {% endfor %}
+            <br><br>
             <p>
                 <label for="published">Online</label><br>
                 <input type="checkbox" id="published" name="published" {% if article.published== 1 %}checked{% endif %}>

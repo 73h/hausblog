@@ -40,7 +40,7 @@ class App
             'base_url' => URL,
             'url' => URL . $_SERVER['REQUEST_URI'],
             'header_image_height' => $header_image_height,
-            'version' => '?v6'
+            'version' => '?v7'
         ];
         echo $this->twig->render($site . '.html', array_merge($basic_parameters, $parameters));
     }
@@ -159,10 +159,12 @@ class App
             }
         }
         $photos = Photos::getPhotos();
+        $emoticons = Articles::getEmoticons();
         $this->render('cms_article', 'Eintrag bearbeiten.', [
             'article' => $article,
             'photos' => $photos,
-            'message' => $message
+            'message' => $message,
+            'emoticons' => $emoticons
         ], CMS_HEADER_IMAGE_HEIGHT);
     }
 

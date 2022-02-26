@@ -29,6 +29,33 @@ class Articles
         return $date;
     }
 
+    public static function getEmoticons(): array
+    {
+        return [
+            'astonished-face',
+            'dizzy-face',
+            'flushed-face',
+            'grinning-face-with-big-eyes',
+            'grinning-face-with-sweat',
+            'slightly-frowning-face',
+            'smiling-face-with-heart-eyes',
+            'smiling-face-with-hearts',
+            'smiling-face-with-sunglasses',
+            'star-struck',
+            'zany-face',
+            'house'
+        ];
+    }
+
+    private static function replaceEmoticons(string $content): string
+    {
+        $emoticons = Articles::getEmoticons();
+        foreach ($emoticons as $emoticon) {
+            $content = str_replace($emoticon, '<img src="assets/icons/icons8-' . $emoticon . '-48.png" class="emoticon">', $content);
+        }
+        return $content;
+    }
+
     public static function getArticles(int $offset, int $row_count, int $published = 1): array
     {
         $sql = <<<EOD
@@ -42,6 +69,7 @@ class Articles
         foreach ($articles as &$article) {
             $article['photos'] = Articles::getArticlePhotos($article['pk_article']);
             $article['created'] = Articles::convertUtcToCet($article['created'])->format('d.m.Y, H:i');
+            $article['content'] = Articles::replaceEmoticons($article['content']);
         }
         return $articles;
     }
@@ -58,7 +86,6 @@ class Articles
             $article = $articles[0];
             $article['photos'] = Articles::getArticlePhotos($article['pk_article']);
             $article['created'] = Articles::convertUtcToCet($article['created'])->format('Y-m-d\TH:i');
-            console($article['photos']);
             return $article;
         }
         return null;
