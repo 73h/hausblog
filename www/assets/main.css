@@ -137,6 +137,24 @@ main article .created img {
     margin-bottom: -.3em;
 }
 
+.photo-gallery-left {
+    left: -58px;
+}
+
+.photo-gallery-right {
+    right: -58px;
+}
+
+@media only screen and (max-width: 1100px) {
+    .photo-gallery-left {
+        left: -12px;
+    }
+
+    .photo-gallery-right {
+        right: -12px;
+    }
+}
+
 @media only screen and (max-width: 900px) {
 
     header .header-content, footer .footer-content, main .row, nav .nav {
@@ -210,20 +228,11 @@ main article .created img {
 .photo-gallery-left, .photo-gallery-right {
     position: absolute;
     z-index: 2;
-    opacity: .5;
     cursor: pointer;
 }
 
 .photo-gallery-left:hover, .photo-gallery-right:hover {
-    opacity: 1;
-}
-
-.photo-gallery-left {
-    left: -20px;
-}
-
-.photo-gallery-right {
-    right: -20px;
+    opacity: .5;
 }
 
 .emoticon {
