@@ -35,7 +35,7 @@ class App
         string $subtitle,
         array  $parameters = [],
         int    $header_image_height = 24,
-        string $header_image = '/assets/header.jpg',
+        string $header_image = HEADER_IMAGE,
         string $description = 'Der Weg in unser eigenes Haus.'
     )
     {
@@ -70,8 +70,12 @@ class App
 
     public function article(int $pk_article)
     {
-        $article = Articles::getArticle($pk_article);
-        $header_image = '/assets/header.jpg';
+        $article = Articles::getArticle($pk_article, Auth::isLoggedIn() ? 0 : 1);
+        if ($article == null) {
+            http_response_code(404);
+            exit;
+        }
+        $header_image = HEADER_IMAGE;
         if (count($article['photos']) > 0)
             $header_image = '/photos/' . $article['photos'][0]['pk_photo'] . '/p.' . $article['photos'][0]['photo_type'];
         $this->render('article', $article['title'] . '.', [
@@ -123,7 +127,7 @@ class App
     public function cms_article(?int $pk_article)
     {
         $message = '';
-        if ($pk_article !== null) $article = Articles::getArticle($pk_article);
+        if ($pk_article !== null) $article = Articles::getArticle($pk_article, Auth::isLoggedIn() ? 0 : 1);
         else {
             $article = [
                 'created' => now_cet()->format('Y-m-d\TH:i'),
@@ -199,6 +203,10 @@ class App
     {
         $message = '';
         $photo = Photos::getPhotoData($pk_photo);
+        if ($photo == null) {
+            http_response_code(404);
+            exit;
+        }
         if (isset($_POST) && count($_POST) > 0) {
             $photo['title'] = $_POST['title'];
             if ($photo['title'] != '') {

@@ -74,14 +74,15 @@ class Articles
         return $articles;
     }
 
-    public static function getArticle(int $pk_article): ?array
+    public static function getArticle(int $pk_article, int $published = 1): ?array
     {
         $sql = <<<EOD
             select pk_article, title, content, created, published
             from tbl_articles
-            where pk_article = ?;
+            where pk_article = ?
+            and published >= ?;
         EOD;
-        $articles = Database::select($sql, 'i', [$pk_article]);
+        $articles = Database::select($sql, 'ii', [$pk_article, $published]);
         if (count($articles) == 1) {
             $article = $articles[0];
             $article['photos'] = Articles::getArticlePhotos($article['pk_article']);
