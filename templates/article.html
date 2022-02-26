@@ -1,27 +1,10 @@
 {% extends "base.html" %}
-{% block navigation %}
-
-{% if articles_count > ROW_COUNT %}
-<div class="nav">
-    Einträge {{ from }} bis {{ to }} von {{ articles_count }}
-    {% if from > 1 %}
-    : <a href="?page={{ page-1 }}">vorherige Seite</a>
-    {% endif %}
-    {% if to < articles_count %}
-    : <a href="?page={{ page+1 }}">nächste Seite</a>
-    {% endif %}
-</div>
-{% endif %}
-
-{% endblock %}
 {% block content %}
-{% for article in articles %}
 <div class="row">
     <article>
         {% include 'parts/article.html' %}
     </article>
 </div>
-{% endfor %}
 <img class="photo-gallery-left" alt="zurück"
      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAACl0lEQVRogdXau2sUURjG4cegNmIRMVHTGaOkiFUELVXERkIqRRtFvOAlECy0tlXR/0awsNDGSzQ2FsYL2ilJFHMTlMjGYnZgM86yuzNndnZfeJsd+L7f+c5l5pyzG4TRDhzBIQxjN/qwpfr8F+bxBe/wAk8wGyh/Jm3DBF5iLYMrooZcr8ZqmwbwACsZwdO8gvvYVST4RkxiKSB40r9wG5tDw+/FmwLBk57GUCj4cSy2ET72Isbywp/Dagnwsf/iclb4i6KVoiz42BVcaBV+XNT6suFjr2phOA0pZ8w38hL2NYLfpL2rTat+LVrO6+pWB0A28o168APCvl2TnsUoDueMs4SdaQ14UCD8HPbX5Mob724SfluB1Z/FSCJf3pjL6K0NONGmyodqwBqu1gacKgA+rfJwIFD853HAfuHfuPUqP4xvgXJURBspZ7oQPvapHhxMSZZVcziKt4nfR/BUneUvhw7BI91X+dgP4VOAQPUm7Ej1WRHwa/gAP7qw8rHn4U/OIKMlVD72756U5F2nIofQ15yxmxpCHwMEKnUSt2MZLaonHvZgJiVpFvXhsf97YgbHqw0MrfdwWtiqtLMnTtL+j7lQjaiIeh3RKXHo8Vn05/Sz2qDduKG5Uhuw27aUSxJbSrprU38nCU90ubBcYCNmRXuPYznjLKruxNJ0s8AGhPJkPXiio8XpDoCs5ykNjhZhDxY6ADbpnxhsBB9rTLkXG0mv4kSz8LEu6JwLjvOtwsc6q/wrpktZ4WONKWdOLMgwbOppD161EX5KCxO2WcUX3UVeP60o6KK7VjtwT9i39rLozL+/SPCkenFNdEqcZbWqiD6Jr0r5MGtWGzLjr1ef9X+3GcR2bK0+X8Z3fLb+7zbzeRP/A9m7GLfZl8f5AAAAAElFTkSuQmCC"/>
 <img class="photo-gallery-right" alt="weiter"

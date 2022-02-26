@@ -30,16 +30,24 @@ class App
         });
     }
 
-    private function render(string $site, string $subtitle, array $parameters = [], int $header_image_height = 24)
+    private function render(
+        string $site,
+        string $subtitle,
+        array  $parameters = [],
+        int    $header_image_height = 24,
+        string $header_image = '/assets/header.jpg',
+        string $description = 'Der Weg in unser eigenes Haus.'
+    )
     {
         $basic_parameters = [
             'login_state' => Auth::isLoggedIn(),
             'title' => 'Hausblog - Jessi & Heiko',
             'subtitle' => $subtitle,
-            'description' => 'Der Weg in unser eigenes Haus.',
+            'description' => $description,
             'base_url' => URL,
             'url' => URL . $_SERVER['REQUEST_URI'],
             'header_image_height' => $header_image_height,
+            'header_image' => $header_image,
             'version' => '?v8'
         ];
         echo $this->twig->render($site . '.html', array_merge($basic_parameters, $parameters));
@@ -60,6 +68,17 @@ class App
         ]);
     }
 
+    public function article(int $pk_article)
+    {
+        $article = Articles::getArticle($pk_article);
+        $header_image = '/assets/header.jpg';
+        if (count($article['photos']) > 0)
+            $header_image = '/photos/' . $article['photos'][0]['pk_photo'] . '/p.' . $article['photos'][0]['photo_type'];
+        $this->render('article', $article['title'] . '.', [
+            'article' => $article
+        ], header_image: $header_image, description: $article['title']);
+    }
+
     public function login(string $code = null)
     {
         $message = '';
@@ -76,7 +95,7 @@ class App
             [
                 'user' => Auth::$user,
                 'message' => $message
-            ], CMS_HEADER_IMAGE_HEIGHT
+            ], header_image_height: CMS_HEADER_IMAGE_HEIGHT
         );
     }
 
@@ -165,7 +184,7 @@ class App
             'photos' => $photos,
             'message' => $message,
             'emoticons' => $emoticons
-        ], CMS_HEADER_IMAGE_HEIGHT);
+        ], header_image_height: CMS_HEADER_IMAGE_HEIGHT);
     }
 
     public function cms_photo_delete(int $pk_photo)
@@ -196,7 +215,7 @@ class App
         $this->render('cms_photo', 'Foto bearbeiten.', [
             'photo' => $photo,
             'message' => $message
-        ], CMS_HEADER_IMAGE_HEIGHT);
+        ], header_image_height: CMS_HEADER_IMAGE_HEIGHT);
     }
 
     public function photo(int $pk_photo, bool $thumbnail)
@@ -224,7 +243,7 @@ class App
         $this->render('cms_articles', 'Redaktion.', [
             'articles' => $articles,
             'cmsnav' => 1
-        ], CMS_HEADER_IMAGE_HEIGHT);
+        ], header_image_height: CMS_HEADER_IMAGE_HEIGHT);
     }
 
     public function cms_photos()
@@ -233,7 +252,7 @@ class App
         $this->render('cms_photos', 'Redaktion.', [
             'photos' => $photos,
             'cmsnav' => 2
-        ], CMS_HEADER_IMAGE_HEIGHT);
+        ], header_image_height: CMS_HEADER_IMAGE_HEIGHT);
     }
 
 }

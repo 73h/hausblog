@@ -17,6 +17,11 @@ Route::add('/', function () {
     $app->index($_GET['page'] ?? null);
 }, ['get']);
 
+Route::add('/articles/([0-9]+)', function (int $pk_article) {
+    $app = new App();
+    $app->article($pk_article);
+}, ['get']);
+
 Route::add('/login', function () {
     $app = new App();
     $app->login($_POST['code'] ?? null);
