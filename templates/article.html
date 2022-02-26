@@ -1,4 +1,10 @@
 {% extends "base.html" %}
+{% block breadcrumb %}
+<div class="nav">
+    <a href="{{ base_url }}">Startseite</a>
+    / {{ article.title }}
+</div>
+{% endblock %}
 {% block content %}
 <div class="row">
     <article>

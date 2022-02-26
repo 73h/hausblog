@@ -24,8 +24,12 @@ header .header-content, footer .footer-content, main article, nav .nav {
     max-width: 900px;
 }
 
-header .header-content, footer .footer-content, main .row, nav .nav {
+header .header-content, footer .footer-content, main .row {
     padding: 3em 0;
+}
+
+nav .nav {
+    padding: 1em 0;
 }
 
 main .row {
@@ -166,8 +170,12 @@ main article .created img {
 
 @media only screen and (max-width: 900px) {
 
-    header .header-content, footer .footer-content, main .row, nav .nav {
+    header .header-content, footer .footer-content, main .row {
         padding: 2em 1.5em;
+    }
+
+    nav .nav {
+        padding: 1em 1.5em;
     }
 
     main .row {

@@ -26,8 +26,8 @@
 </head>
 <body>
 <header>
-    <div class="image" style="height: {{ header_image_height }}em;background-image: url({{ header_image }});"
-    ></div>
+    <div class="image"
+         style="height: {{ header_image_height }}em;background-image: url({{ header_image }});"></div>
     <div class="header-content">
         <div class="title">
             <h1><a href="/">{{ title }}</a></h1>
@@ -37,6 +37,8 @@
 </header>
 <nav class="header-nav">
     {% block navigation %}
+    {% endblock %}
+    {% block breadcrumb %}
     {% endblock %}
 </nav>
 <main>

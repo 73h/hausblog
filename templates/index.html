@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block navigation %}
-
 {% if articles_count > ROW_COUNT %}
 <div class="nav">
     Einträge {{ from }} bis {{ to }} von {{ articles_count }}
@@ -12,7 +11,6 @@
     {% endif %}
 </div>
 {% endif %}
-
 {% endblock %}
 {% block content %}
 {% for article in articles %}
