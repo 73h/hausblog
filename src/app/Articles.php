@@ -70,7 +70,7 @@ class Articles
             from tbl_photos
             join tbl_articles_photos on fk_photo = pk_photo
             where fk_article = ?
-            order by uploaded desc;
+            order by position, uploaded desc;
         EOD;
         return Database::select($sql, 'i', [$pk_article]);
     }
@@ -81,10 +81,10 @@ class Articles
         Database::update_or_delete($sql, 'i', [$pk_article]);
     }
 
-    public static function insertArticlePhoto(int $pk_article, int $pk_photo)
+    public static function insertArticlePhoto(int $pk_article, int $pk_photo, $position)
     {
-        $sql = "insert into tbl_articles_photos (fk_article, fk_photo) values (?, ?);";
-        Database::insert($sql, 'ii', [$pk_article, $pk_photo]);
+        $sql = "insert into tbl_articles_photos (fk_article, fk_photo, position) values (?, ?, ?);";
+        Database::insert($sql, 'iii', [$pk_article, $pk_photo, $position]);
     }
 
     public static function updateArticle(

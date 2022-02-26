@@ -10,11 +10,13 @@ create table tbl_articles
 
 create table tbl_articles_photos
 (
-    pk_article_photo int auto_increment
+    pk_article_photo bigint auto_increment
         primary key,
-    fk_article       int not null,
-    fk_photo         int not null
+    fk_article       int      not null,
+    fk_photo         int      not null,
+    position         smallint null
 );
+
 
 create table tbl_logins
 (

@@ -477,3 +477,5 @@ composer.lock
 error.log
 
 .env
+
+database_updates.sql

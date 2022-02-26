@@ -131,8 +131,10 @@ class App
                         $article['created'],
                         $article['published']
                     );
+                    $position = 1;
                     foreach ($article['photos'] as $photo) {
-                        Articles::insertArticlePhoto($pk_article, $photo['pk_photo']);
+                        Articles::insertArticlePhoto($pk_article, $photo['pk_photo'], $position);
+                        $position++;
                     }
                     header('Location: /cms/articles/' . $pk_article);
                     exit;
@@ -145,10 +147,10 @@ class App
                         $article['published']
                     );
                     Articles::deleteArticlePhotos($pk_article);
+                    $position = 1;
                     foreach ($article['photos'] as $photo) {
-                        console($pk_article);
-                        console($photo['pk_photo']);
-                        Articles::insertArticlePhoto($pk_article, $photo['pk_photo']);
+                        Articles::insertArticlePhoto($pk_article, $photo['pk_photo'], $position);
+                        $position++;
                     }
                 }
             } else {
