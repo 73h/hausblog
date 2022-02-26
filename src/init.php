@@ -8,6 +8,7 @@ use src\app\Auth;
 Dotenv::createImmutable(BASE)->load();
 define("URL", (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST']);
 const ROW_COUNT = 10;
+const CMS_HEADER_IMAGE_HEIGHT = 10;
 
 function now(): DateTime
 {

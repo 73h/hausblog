@@ -30,7 +30,7 @@ class App
         });
     }
 
-    private function render(string $site, string $subtitle, array $parameters = [])
+    private function render(string $site, string $subtitle, array $parameters = [], int $header_image_height = 24)
     {
         $basic_parameters = [
             'login_state' => Auth::isLoggedIn(),
@@ -39,7 +39,8 @@ class App
             'description' => 'Der Weg in unser eigenes Haus.',
             'base_url' => URL,
             'url' => URL . $_SERVER['REQUEST_URI'],
-            'version' => '?v4'
+            'header_image_height' => $header_image_height,
+            'version' => '?v5'
         ];
         echo $this->twig->render($site . '.html', array_merge($basic_parameters, $parameters));
     }
@@ -75,7 +76,7 @@ class App
             [
                 'user' => Auth::$user,
                 'message' => $message
-            ]
+            ], CMS_HEADER_IMAGE_HEIGHT
         );
     }
 
@@ -162,7 +163,7 @@ class App
             'article' => $article,
             'photos' => $photos,
             'message' => $message
-        ]);
+        ], CMS_HEADER_IMAGE_HEIGHT);
     }
 
     public function cms_photo_delete(int $pk_photo)
@@ -191,7 +192,7 @@ class App
         $this->render('cms_photo', 'Foto bearbeiten.', [
             'photo' => $photo,
             'message' => $message
-        ]);
+        ], CMS_HEADER_IMAGE_HEIGHT);
     }
 
     public function photo(int $pk_photo, bool $thumbnail)
@@ -216,13 +217,19 @@ class App
     public function cms_articles()
     {
         $articles = Articles::getArticles(0, 1000000, 0);
-        $this->render('cms_articles', 'Redaktion.', ['articles' => $articles, 'cmsnav' => 1]);
+        $this->render('cms_articles', 'Redaktion.', [
+            'articles' => $articles,
+            'cmsnav' => 1
+        ], CMS_HEADER_IMAGE_HEIGHT);
     }
 
     public function cms_photos()
     {
         $photos = Photos::getPhotos();
-        $this->render('cms_photos', 'Redaktion.', ['photos' => $photos, 'cmsnav' => 2]);
+        $this->render('cms_photos', 'Redaktion.', [
+            'photos' => $photos,
+            'cmsnav' => 2
+        ], CMS_HEADER_IMAGE_HEIGHT);
     }
 
 }
