@@ -40,7 +40,7 @@ class App
             'base_url' => URL,
             'url' => URL . $_SERVER['REQUEST_URI'],
             'header_image_height' => $header_image_height,
-            'version' => '?v7'
+            'version' => '?v8'
         ];
         echo $this->twig->render($site . '.html', array_merge($basic_parameters, $parameters));
     }

@@ -20,11 +20,12 @@ header .header-content, footer .footer-content, main article, nav .nav {
 }
 
 header .header-content, footer .footer-content, main .row, nav .nav {
-    padding: 2em 0;
+    padding: 3em 0;
 }
 
 main .row {
-    padding-bottom: 4em;
+    padding-top: 3em;
+    padding-bottom: 5em;
     background: linear-gradient(#ffffff, #d6dbdf);
 }
 
@@ -143,7 +144,8 @@ main article .created img {
     }
 
     main .row {
-        padding-bottom: 4em;
+        padding-top: 3em;
+        padding-bottom: 5em;
     }
 
     main article .photo {
@@ -217,11 +219,11 @@ main article .created img {
 }
 
 .photo-gallery-left {
-    left: 1em;
+    left: -20px;
 }
 
 .photo-gallery-right {
-    right: 1em;
+    right: -20px;
 }
 
 .emoticon {
