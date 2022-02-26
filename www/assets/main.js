@@ -2,18 +2,21 @@ const lds_ripple = document.querySelector('.lds-ripple');
 const photo_gallery_left = document.querySelector('.photo-gallery-left');
 const photo_gallery_right = document.querySelector('.photo-gallery-right');
 let gallery = null;
+let last_scroll_position = 0;
 
 window.addEventListener("DOMContentLoaded", function () {
     setArticleEvents();
     lds_ripple.style.visibility = 'hidden';
-    photo_gallery_left.style.visibility = 'hidden';
-    photo_gallery_right.style.visibility = 'hidden';
-    photo_gallery_left.addEventListener('click', function () {
-        photoGallerySwipe(-1)
-    });
-    photo_gallery_right.addEventListener('click', function () {
-        photoGallerySwipe(1)
-    });
+    if (photo_gallery_left) {
+        photo_gallery_left.style.visibility = 'hidden';
+        photo_gallery_right.style.visibility = 'hidden';
+        photo_gallery_left.addEventListener('click', function () {
+            photoGallerySwipe(-1)
+        });
+        photo_gallery_right.addEventListener('click', function () {
+            photoGallerySwipe(1)
+        });
+    }
 });
 
 function setArticleEvents() {
@@ -64,7 +67,9 @@ function openPhotoGallery(div_photos) {
         photo_gallery_left.style.top = (Math.round(width / 2) - 24) + 'px';
         photo_gallery_right.style.top = (Math.round(width / 2) - 24) + 'px';
     }
-    div_photos.scrollIntoView();
+    last_scroll_position = window.pageYOffset;
+    let top = window.pageYOffset + div_photos.getBoundingClientRect().top - 50;
+    window.scrollTo({top: top, behavior: 'smooth'});
 }
 
 function closePhotoGallery(div_photos) {
@@ -72,6 +77,7 @@ function closePhotoGallery(div_photos) {
     photo_gallery_right.style.visibility = 'hidden';
     div_photos.classList.remove('show');
     div_photos.style.height = null;
+    window.scrollTo({top: last_scroll_position, behavior: 'smooth'});
 }
 
 function photoGallerySwipe(direction) {

@@ -40,7 +40,7 @@ class App
             'base_url' => URL,
             'url' => URL . $_SERVER['REQUEST_URI'],
             'header_image_height' => $header_image_height,
-            'version' => '?v5'
+            'version' => '?v6'
         ];
         echo $this->twig->render($site . '.html', array_merge($basic_parameters, $parameters));
     }
@@ -137,8 +137,6 @@ class App
                         Articles::insertArticlePhoto($pk_article, $photo['pk_photo'], $position);
                         $position++;
                     }
-                    header('Location: /cms/articles/' . $pk_article);
-                    exit;
                 } else {
                     Articles::updateArticle(
                         $pk_article,
@@ -154,6 +152,8 @@ class App
                         $position++;
                     }
                 }
+                header('Location: /cms/articles');
+                exit;
             } else {
                 $message = 'Der Titel und Inhalt dürfen nicht leer sein.';
             }
@@ -185,6 +185,8 @@ class App
                     $pk_photo,
                     $photo['title']
                 );
+                header('Location: /cms/photos');
+                exit;
             } else {
                 $message = 'Der Titel darf nicht leer sein.';
             }

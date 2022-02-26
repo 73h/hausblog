@@ -30,10 +30,19 @@
             <div class="cms-photos">
                 <input type="hidden" id="photos" name="photos"
                        value="{{ article.photos|column('pk_photo')|join(';') }}">
-                {% for photo in photos %}
-                <img class="cms-photo{% if photo.pk_photo in article.photos|column('pk_photo') %} cms-selected{% endif %}"
-                     src="{{ base_url }}/photos/{{ photo.pk_photo }}/tn.{{ photo.thumbnail_type }}"
-                     data-photo="{{ photo.pk_photo }}"/>
+                {% for i, photo in photos %}
+                {% set position = '' %}
+                {% set cms_selected = '' %}
+                {% if photo.pk_photo in article.photos|column('pk_photo') %}
+                {% set position = article.photos|filter(p => p.pk_photo == photo.pk_photo)|first.position %}
+                {% set cms_selected = ' cms-selected' %}
+                {% endif %}
+                <div class="cms-photo-wrapper">
+                    <div class="cms-photo-position" id="photo-position-{{ photo.pk_photo }}">{{ position }}</div>
+                    <img class="cms-photo{{ cms_selected }}"
+                         src="{{ base_url }}/photos/{{ photo.pk_photo }}/tn.{{ photo.thumbnail_type }}"
+                         data-photo="{{ photo.pk_photo }}"/>
+                </div>
                 {% endfor %}
             </div>
             {% endif %}

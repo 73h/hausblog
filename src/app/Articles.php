@@ -58,6 +58,7 @@ class Articles
             $article = $articles[0];
             $article['photos'] = Articles::getArticlePhotos($article['pk_article']);
             $article['created'] = Articles::convertUtcToCet($article['created'])->format('Y-m-d\TH:i');
+            console($article['photos']);
             return $article;
         }
         return null;
@@ -66,7 +67,7 @@ class Articles
     public static function getArticlePhotos(int $pk_article): array
     {
         $sql = <<<EOD
-            select pk_photo, title, thumbnail_type, photo_type
+            select pk_photo, title, thumbnail_type, photo_type, position
             from tbl_photos
             join tbl_articles_photos on fk_photo = pk_photo
             where fk_article = ?
