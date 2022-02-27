@@ -25,6 +25,15 @@ class Cms extends App
         );
     }
 
+    private function insertArticlePhotos(array $photos, int $pk_article)
+    {
+        $position = 1;
+        foreach ($photos as $photo) {
+            Articles::insertArticlePhoto($pk_article, $photo['pk_photo'], $position);
+            $position++;
+        }
+    }
+
     public function cms_article_delete(int $pk_article)
     {
         Articles::deleteArticlePhotos($pk_article);
@@ -64,11 +73,7 @@ class Cms extends App
                         $article['created'],
                         $article['published']
                     );
-                    $position = 1;
-                    foreach ($article['photos'] as $photo) {
-                        Articles::insertArticlePhoto($pk_article, $photo['pk_photo'], $position);
-                        $position++;
-                    }
+                    $this->insertArticlePhotos($article['photos'], $pk_article);
                 } else {
                     Articles::updateArticle(
                         $pk_article,
@@ -78,11 +83,7 @@ class Cms extends App
                         $article['published']
                     );
                     Articles::deleteArticlePhotos($pk_article);
-                    $position = 1;
-                    foreach ($article['photos'] as $photo) {
-                        Articles::insertArticlePhoto($pk_article, $photo['pk_photo'], $position);
-                        $position++;
-                    }
+                    $this->insertArticlePhotos($article['photos'], $pk_article);
                 }
                 header('Location: /cms/articles');
                 exit;
