@@ -8,6 +8,3 @@ Use ngrok for local development
 
     ngrok http -region eu 8081
 
-Emoji Unicode Tables
-
-    https://apps.timwhitlock.info/emoji/tables/unicode
