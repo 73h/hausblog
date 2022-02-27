@@ -3,14 +3,15 @@
 <div class="tr table-head">
     <div class="td">Erstellt</div>
     <div class="td">Titel</div>
-    <div class="td">Thumbnail</div>
+    <div class="td">Vorschau</div>
     <div class="td">Aktionen</div>
 </div>
 {% for photo in photos %}
 <div class="tr">
     <div class="td">{{ photo.uploaded }} Uhr</div>
     <div class="td">{{ photo.title }}</div>
-    <div class="td"><img src="{{ base_url }}/photos/{{ photo.pk_photo }}/tn/{{ photo.id }}.{{ photo.thumbnail_type }}"/>
+    <div class="td"><img src="{{ base_url }}/photos/{{ photo.pk_photo }}/tn/{{ photo.id }}.{{ photo.thumbnail_type }}"
+                         class="cms-table-photo"/>
     </div>
     <div class="td">
         <a href="/cms/photos/{{ photo.pk_photo }}">bearbeiten</a>

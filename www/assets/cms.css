@@ -8,7 +8,15 @@
 
 .cms .table-head {
     background-color: #969b9f !important;
+}
+
+.cms .table-head * {
     color: white;
+}
+
+.cms .table-head img {
+    height: 1.2em;
+    margin: 0 0 -.3em 0;
 }
 
 .cms .td {
@@ -16,7 +24,7 @@
     padding: .4em .6em;
 }
 
-.cms .td img {
+.cms .td .cms-table-photo {
     height: 3em;
     width: 3em;
     object-fit: cover;
