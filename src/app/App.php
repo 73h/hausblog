@@ -77,7 +77,7 @@ class App
         }
         $header_image = HEADER_IMAGE;
         if (count($article['photos']) > 0)
-            $header_image = '/photos/' . $article['photos'][0]['pk_photo'] . '/p.' . $article['photos'][0]['photo_type'];
+            $header_image = '/photos/' . $article['photos'][0]['pk_photo'] . '/photo.' . $article['photos'][0]['photo_type'];
         $this->render('article', $article['title'] . '.', [
             'article' => $article
         ], header_image: $header_image, description: $article['title']);

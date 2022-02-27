@@ -85,8 +85,8 @@ Route::add('/logout', function () {
     exit;
 }, ['get']);
 
-Route::add('/photos/([0-9]+)/(tn|p).[a-z]+', function (int $pk_image, string $type) {
-    $thumbnail = $type == 'tn';
+Route::add('/photos/([0-9]+)/(thumbnail|photo).[a-z]+', function (int $pk_image, string $type) {
+    $thumbnail = $type == 'thumbnail';
     $app = new App();
     $app->photo($pk_image, $thumbnail);
 }, ['get']);

@@ -35,7 +35,7 @@ nav .nav {
 main .row {
     padding-top: 3em;
     padding-bottom: 5em;
-    background: linear-gradient(#ffffff 60%, #e6ebef);
+    background: linear-gradient(white 60%, #e6ebef);
     border-bottom: solid 0.01em #c6cbcf;
 }
 

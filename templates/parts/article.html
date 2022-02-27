@@ -3,13 +3,13 @@
         alt="erstellt"/>
     {{ article.created }}</p>
 <h2><a href="/articles/{{ article.pk_article }}">{{ article.title }}</a></h2>
-{{ article.content|markdown_to_html }}
+{{ article.rendered_content|markdown_to_html }}
 {% if article.photos|length > 0 %}
 <div class="photos">
     {% for photo in article.photos %}
     <img class="photo" alt="{{ photo.title }}" title="{{ photo.title }}"
-         src="/photos/{{ photo.pk_photo }}/tn.{{ photo.thumbnail_type }}"
-         data-photo="/photos/{{ photo.pk_photo }}/p.{{ photo.photo_type }}"/>
+         src="/photos/{{ photo.pk_photo }}/thumbnail.{{ photo.thumbnail_type }}"
+         data-photo="/photos/{{ photo.pk_photo }}/photo.{{ photo.photo_type }}"/>
     {% endfor %}
 </div>
 {% endif %}

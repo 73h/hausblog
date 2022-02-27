@@ -51,7 +51,7 @@ class Articles
     {
         $emoticons = Articles::getEmoticons();
         foreach ($emoticons as $emoticon) {
-            $content = str_replace($emoticon, '<img src="assets/icons/icons8-' . $emoticon . '-48.png" class="emoticon" alt="' . $emoticon . '">', $content);
+            $content = str_replace($emoticon, '<img src="/assets/icons/icons8-' . $emoticon . '-48.png" class="emoticon" alt="' . $emoticon . '">', $content);
         }
         return $content;
     }
@@ -69,7 +69,7 @@ class Articles
         foreach ($articles as &$article) {
             $article['photos'] = Articles::getArticlePhotos($article['pk_article']);
             $article['created'] = Articles::convertUtcToCet($article['created'])->format('d.m.Y, H:i');
-            $article['content'] = Articles::replaceEmoticons($article['content']);
+            $article['rendered_content'] = Articles::replaceEmoticons($article['content']);
         }
         return $articles;
     }
@@ -87,6 +87,7 @@ class Articles
             $article = $articles[0];
             $article['photos'] = Articles::getArticlePhotos($article['pk_article']);
             $article['created'] = Articles::convertUtcToCet($article['created'])->format('Y-m-d\TH:i');
+            $article['rendered_content'] = Articles::replaceEmoticons($article['content']);
             return $article;
         }
         return null;
