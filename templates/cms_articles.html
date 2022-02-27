@@ -6,20 +6,20 @@
     </a>
 </p>
 <div class="tr table-head">
-    <div class="td">Erstellt</div>
-    <div class="td">Titel</div>
-    <div class="td"><img src="/assets/icons/icons8-eye-24.png" \></div>
-    <div class="td">Aktionen</div>
+    <div class="td" style="width: 10%;"><img src="/assets/icons/icons8-eye-24.png" \></div>
+    <div class="td" style="width: 30%;">Erstellt</div>
+    <div class="td" style="width: 30%;">Titel</div>
+    <div class="td" style="width: 30%;">Aktionen</div>
 </div>
 {% for article in articles %}
 <div class="tr">
-    <div class="td">{{ article.created }} Uhr</div>
-    <div class="td">{{ article.title }}</div>
-    <div class="td">{{ article.published ? 'Ja':'Nein' }}</div>
-    <div class="td">
-        <a href="/cms/articles/{{ article.pk_article }}">bearbeiten</a>
-        <a href="javascript:if(confirm('Eintrag wirklich löschen?')){window.location.href='/cms/articles/{{ article.pk_article }}/delete';}">löschen</a>
-    </div>
+    <div class="td" style="width: 10%;">{{ article.published ? 'Ja':'Nein' }}</div>
+    <div class="td" style="width: 30%;">{{ article.created }} Uhr</div>
+    <div class="td" style="width: 30%;">{{ article.title }}</div>
+    <div class="td" style="width: 30%;"
+    <a href="/cms/articles/{{ article.pk_article }}">bearbeiten</a>
+    <a href="javascript:if(confirm('Eintrag wirklich löschen?')){window.location.href='/cms/articles/{{ article.pk_article }}/delete';}">löschen</a>
+</div>
 </div>
 {% endfor %}
 {% endblock %}

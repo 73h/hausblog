@@ -1,19 +1,20 @@
 {% extends "cms.html" %}
 {% block cms_content %}
 <div class="tr table-head">
-    <div class="td">Erstellt</div>
-    <div class="td">Titel</div>
-    <div class="td">Vorschau</div>
-    <div class="td">Aktionen</div>
+    <div class="td" style="width: 25%;">Erstellt</div>
+    <div class="td" style="width: 30%;">Titel</div>
+    <div class="td" style="width: 20%;">Vorschau</div>
+    <div class="td" style="width: 25%;">Aktionen</div>
 </div>
 {% for photo in photos %}
 <div class="tr">
-    <div class="td">{{ photo.uploaded }} Uhr</div>
-    <div class="td">{{ photo.title }}</div>
-    <div class="td"><img src="{{ base_url }}/photos/{{ photo.pk_photo }}/tn/{{ photo.id }}.{{ photo.thumbnail_type }}"
-                         class="cms-table-photo"/>
+    <div class="td" style="width: 25%;">{{ photo.uploaded }} Uhr</div>
+    <div class="td" style="width: 30%;">{{ photo.title }}</div>
+    <div class="td" style="width: 20%;"><img
+            src="{{ base_url }}/photos/{{ photo.pk_photo }}/tn/{{ photo.id }}.{{ photo.thumbnail_type }}"
+            class="cms-table-photo"/>
     </div>
-    <div class="td">
+    <div class="td" style="width: 25%;">
         <a href="/cms/photos/{{ photo.pk_photo }}">bearbeiten</a>
         <a href="javascript:if(confirm('Foto wirklich löschen?')){window.location.href='/cms/photos/{{ photo.pk_photo }}/delete';}">löschen</a>
     </div>
