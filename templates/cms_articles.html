@@ -16,10 +16,10 @@
     <div class="td" style="width: 10%;">{{ article.published ? 'Ja':'Nein' }}</div>
     <div class="td" style="width: 25%;">{{ article.created }} Uhr</div>
     <div class="td" style="width: 35%;">{{ article.title }}</div>
-    <div class="td" style="width: 30%;"
-    <a href="/cms/articles/{{ article.pk_article }}">bearbeiten</a>
-    <a href="javascript:if(confirm('Eintrag wirklich löschen?')){window.location.href='/cms/articles/{{ article.pk_article }}/delete';}">löschen</a>
-</div>
+    <div class="td" style="width: 30%;">
+        <a href="/cms/articles/{{ article.pk_article }}">bearbeiten</a>
+        <a href="javascript:if(confirm('Eintrag wirklich löschen?')){window.location.href='/cms/articles/{{ article.pk_article }}/delete';}">löschen</a>
+    </div>
 </div>
 {% endfor %}
 {% endblock %}
