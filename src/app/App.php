@@ -76,8 +76,10 @@ class App
             exit;
         }
         $header_image = HEADER_IMAGE;
-        if (count($article['photos']) > 0)
-            $header_image = '/photos/' . $article['photos'][0]['pk_photo'] . '/photo.' . $article['photos'][0]['photo_type'];
+        if (count($article['photos']) > 0) {
+            $photo = $article['photos'][0];
+            $header_image = '/photos/' . $photo['pk_photo'] . '/' . $photo['id'] . '.' . $photo['photo_type'];
+        }
         $this->render('article', $article['title'] . '.', [
             'article' => $article
         ], header_image: $header_image, description: $article['title']);
@@ -226,13 +228,18 @@ class App
         ], header_image_height: CMS_HEADER_IMAGE_HEIGHT);
     }
 
-    public function photo(int $pk_photo, bool $thumbnail)
+    public function photo(int $pk_photo, string $id, bool $thumbnail)
     {
+        console([$pk_photo, $id, $thumbnail]);
         if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
             header('Last-Modified: ' . $_SERVER['HTTP_IF_MODIFIED_SINCE'], true, 304);
             exit;
         }
-        $photo = Photos::getPhoto($pk_photo, $thumbnail);
+        $photo = Photos::getPhoto($pk_photo, $id, $thumbnail);
+        if ($photo == null) {
+            http_response_code(404);
+            exit;
+        }
         header('Cache-Control: private, max-age=31536000, pre-check=31536000');
         header('Pragma: private');
         header('Expires: ' . date(DATE_RFC822, strtotime('1 year')));

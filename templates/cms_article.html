@@ -43,7 +43,7 @@
                 <div class="cms-photo-wrapper">
                     <div class="cms-photo-position" id="photo-position-{{ photo.pk_photo }}">{{ position }}</div>
                     <img class="cms-photo{{ cms_selected }}"
-                         src="{{ base_url }}/photos/{{ photo.pk_photo }}/thumbnail.{{ photo.thumbnail_type }}"
+                         src="{{ base_url }}/photos/{{ photo.pk_photo }}/tn/{{ photo.id }}.{{ photo.thumbnail_type }}"
                          data-photo="{{ photo.pk_photo }}"/>
                 </div>
                 {% endfor %}

@@ -96,7 +96,7 @@ class Articles
     public static function getArticlePhotos(int $pk_article): array
     {
         $sql = <<<EOD
-            select pk_photo, title, thumbnail_type, photo_type, position
+            select pk_photo, title, thumbnail_type, photo_type, position, id
             from tbl_photos
             join tbl_articles_photos on fk_photo = pk_photo
             where fk_article = ?

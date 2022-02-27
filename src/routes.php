@@ -85,10 +85,10 @@ Route::add('/logout', function () {
     exit;
 }, ['get']);
 
-Route::add('/photos/([0-9]+)/(thumbnail|photo).[a-z]+', function (int $pk_image, string $type) {
-    $thumbnail = $type == 'thumbnail';
+Route::add('/photos/([0-9]+)/(tn/|)([0-9a-z]+)\.[a-z]+', function (int $pk_image, string $type, string $id) {
+    $thumbnail = $type == 'tn/';
     $app = new App();
-    $app->photo($pk_image, $thumbnail);
+    $app->photo($pk_image, $id, $thumbnail);
 }, ['get']);
 
 Route::add('/webhook', function () {

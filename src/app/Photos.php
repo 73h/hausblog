@@ -15,8 +15,8 @@ class Photos
     {
         $sql = <<<EOD
             insert into tbl_photos
-                (uploaded, title, thumbnail, thumbnail_type, photo, photo_type)
-                values (?, ?, ?, ?, ?, ?);
+                (uploaded, title, thumbnail, thumbnail_type, photo, photo_type, id)
+                values (?, ?, ?, ?, ?, ?, left(md5(rand()),16));
         EOD;
         $parameters = [
             $uploaded,
@@ -29,18 +29,27 @@ class Photos
         Database::insert($sql, 'ssssss', $parameters);
     }
 
-    public static function getPhoto(int $pk_photo, bool $thumbnail): ?array
+    public static function getPhoto(int $pk_photo, string $id, bool $thumbnail): ?array
     {
-        if ($thumbnail) $sql = 'select thumbnail as photo, thumbnail_type as type from tbl_photos where pk_photo = ?;';
-        else $sql = 'select photo, photo_type as type from tbl_photos where pk_photo = ?;';
-        $photos = Database::select($sql, 'i', [$pk_photo]);
+        if ($thumbnail) {
+            $sql = <<<EOD
+                select thumbnail as photo, thumbnail_type as type from tbl_photos
+                where pk_photo = ? and id = ?;
+            EOD;
+        } else {
+            $sql = <<<EOD
+                select photo, photo_type as type from tbl_photos
+                where pk_photo = ? and id = ?;
+            EOD;
+        }
+        $photos = Database::select($sql, 'is', [$pk_photo, $id]);
         if (count($photos) == 1) return $photos[0];
         return null;
     }
 
     public static function getPhotoData(int $pk_photo): ?array
     {
-        $sql = 'select pk_photo, uploaded, title, thumbnail_type, photo_type from tbl_photos where pk_photo = ?;';
+        $sql = 'select pk_photo, uploaded, title, thumbnail_type, photo_type, id from tbl_photos where pk_photo = ?;';
         $photos = Database::select($sql, 'i', [$pk_photo]);
         if (count($photos) == 1) return $photos[0];
         return null;
@@ -48,7 +57,7 @@ class Photos
 
     public static function getPhotos(): array
     {
-        $sql = "select pk_photo, uploaded, title, thumbnail_type, photo_type from tbl_photos order by uploaded desc;";
+        $sql = "select pk_photo, uploaded, title, thumbnail_type, photo_type, id from tbl_photos order by uploaded desc;";
         return Database::select($sql);
     }
 

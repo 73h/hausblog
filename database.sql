@@ -1,3 +1,5 @@
+-- create all tables
+
 create table tbl_articles
 (
     pk_article int auto_increment
@@ -14,9 +16,8 @@ create table tbl_articles_photos
         primary key,
     fk_article       int      not null,
     fk_photo         int      not null,
-    position         smallint null
+    position         smallint not null
 );
-
 
 create table tbl_logins
 (
@@ -37,7 +38,8 @@ create table tbl_photos
     thumbnail      mediumblob   not null,
     thumbnail_type varchar(10)  not null,
     photo          mediumblob   not null,
-    photo_type     varchar(10)  not null
+    photo_type     varchar(10)  not null,
+    id             varchar(16)  not null
 );
 
 create table tbl_users
@@ -49,4 +51,11 @@ create table tbl_users
     telegram_id       int          null,
     telegram_username varchar(255) null
 );
+
+
+-- update all photo ids
+set sql_safe_updates = 0;
+update tbl_photos
+set id = left(md5(rand()), 16);
+set sql_safe_updates = 1;
 

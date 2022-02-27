@@ -10,7 +10,8 @@
 <div class="tr">
     <div class="td">{{ photo.uploaded }} Uhr</div>
     <div class="td">{{ photo.title }}</div>
-    <div class="td"><img src="{{ base_url }}/photos/{{ photo.pk_photo }}/tn.{{ photo.thumbnail_type }}"/></div>
+    <div class="td"><img src="{{ base_url }}/photos/{{ photo.pk_photo }}/tn/{{ photo.id }}.{{ photo.thumbnail_type }}"/>
+    </div>
     <div class="td">
         <a href="/cms/photos/{{ photo.pk_photo }}">bearbeiten</a>
         <a href="javascript:if(confirm('Foto wirklich löschen?')){window.location.href='/cms/photos/{{ photo.pk_photo }}/delete';}">löschen</a>

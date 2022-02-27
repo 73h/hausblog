@@ -8,8 +8,8 @@
 <div class="photos">
     {% for photo in article.photos %}
     <img class="photo" alt="{{ photo.title }}" title="{{ photo.title }}"
-         src="/photos/{{ photo.pk_photo }}/thumbnail.{{ photo.thumbnail_type }}"
-         data-photo="/photos/{{ photo.pk_photo }}/photo.{{ photo.photo_type }}"/>
+         src="/photos/{{ photo.pk_photo }}/tn/{{ photo.id }}.{{ photo.thumbnail_type }}"
+         data-photo="/photos/{{ photo.pk_photo }}/{{ photo.id }}.{{ photo.photo_type }}"/>
     {% endfor %}
 </div>
 {% endif %}
