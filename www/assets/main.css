@@ -276,9 +276,66 @@ main article .created img {
 }
 
 .emoticon {
-    margin: -6px -6px;
+    margin: -.3em;
+    width: 2em;
 }
 
 .loose {
     position: absolute;
+}
+
+.comment-form {
+    opacity: 0;
+    transition: 1s;
+}
+
+.comment {
+    margin: 2em 0;
+}
+
+.comment:last-of-type {
+    margin-bottom: 0;
+}
+
+.comment:first-of-type {
+    margin-top: 1em;
+}
+
+.comment .creator-name {
+    font-weight: bold;
+}
+
+.comment .creator {
+    font-size: 1.2em;
+}
+
+.comment .creator, .comment .comment {
+    margin-top: .4em;
+}
+
+.comments {
+    margin-top: 1em;
+    font-size: 1.1em;
+}
+
+.comments * {
+    color: #7860b7;
+}
+
+.comments img {
+    height: 1.3em;
+    margin-bottom: -.4em;
+}
+
+.info {
+    color: #7860b7;
+}
+
+.info img {
+    height: 2.2em;
+    margin-bottom: -.8em;
+}
+
+.article-content {
+    font-size: 1.1em;
 }

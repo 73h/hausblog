@@ -9,6 +9,76 @@
 <div class="row">
     <article>
         {% include 'parts/article.html' %}
+        <a id="comments"></a>
+    </article>
+</div>
+<div class="row">
+    <article>
+        <h2>{{ article.comments|length }} Kommentar{% if article.comments|length != 1 %}e{% endif %}</h2>
+        {% if article.comments|length == 0 %}
+        <p>
+            Sei der Erste! <img src="/assets/icons/icons8-smiling-face-with-sunglasses-48.png" class="emoticon" \>
+        </p>
+        {% endif %}
+        {% for comment in article.comments %}
+        <div class="comment">
+            <div class="created">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAACTUlEQVRoge2ZPUscQRyHnwvGYBf9ALG0FmLAVwL5AsmXiI0a0AiijVj5BcTuuhi7FJFAouUpCoe1RZImd1baqCmUw7GYPRjHdWdudnbGg31git2Z/c3vv/O6s1BSUlLSDUwC20ATaAGioNQCGsBXYMKH8R5gs0DDprSReHAmpnk1CCcmNaHvwAjQ6ypoQW9Sx45W97iL2Db3zYfmm1L/FxeBpiLw2p8va94o9TdcBNTZpshu8xgvlPpbjxWqZAgIy3JFYvRgO0UJc5E4PIttIC9dH4BtF3oKYyCVrm+BMoDYuAYwCOwBV8Au8CqlzCfgNEmzjhq5UDdTOnta/i8tX98I3vJwf2/SAJgDhoCXvgO41PIvtPwFLV8A8x1qWOHahQ4N10fatUi5Z9J4DiwDJ8AN8AdYA/psTWa1wCCyyS+Bn6T331nkjrYJzHSo0Q/s87AVRXLfKoisAIqkH6iTbr6dVm2EYgRgY14Av23EQgdga14A1zaCIQPoxLxADmwjpkFsWoSmgb/I2eOjR/MCWMobgGkRGkMuXupCNurJfA05xeYKwMdC5mK+njxnRVYAu1q+3gJvUyqfCmneFIDNQrYInANnwOfQ5qGYY5Vg5sH/wVZQ8yCPuNtCeY8We4ADg1mv5kHu31XBHeRxn0t3+hDafJuNDivW07tEpxrDPMimdw3iP/J8s4L8rAxuXmUc2AL+Yf+L6Ufy7HBs83lZwWz+GBiIZdBEjWzzNZ7om2+j75sEckxUgffk/IkXgnXktruG/EgfJt5Za4l37gBG3w8vP+LUrgAAAABJRU5ErkJggg=="
+                     alt="erstellt"/> {{ comment.created }} Uhr
+            </div>
+            <div class="creator">
+                <span class="creator-name">{{ comment.creator }}</span> schreibt:
+            </div>
+            <div class="comment">{{ comment.comment|markdown_to_html|html_purifier }}</div>
+            {% if comment.published == 0 and iphash == comment.creator_hash %}
+            <p class="info">
+                <img src="data:image/png;base64,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"/>
+                Dein Kommentar ist noch nicht freigeschaltet und solange nur für Dich sichtbar.
+            </p>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <a id="add-comment"></a>
+    </article>
+</div>
+<div class="row">
+    <article>
+        <form method="POST" action="{{ url }}#add-comment" class="comment-form">
+            <h3>Kommentar hinzufügen</h3>
+            <p>
+                <label for="field-1">Name</label><br>
+                <input type="text" placeholder="Dein Name" id="field-1" name="field-1" style="width:90%;"
+                       maxlength="100" required>
+            </p>
+            {% if message.creator %}
+            <p class="error">
+                {{ message.creator }}
+            </p>
+            {% endif %}
+            <br>
+            <p>
+                <label for="field-2">Kommentar</label><br>
+                <textarea placeholder="Kommentar" id="field-2" name="field-2" rows="6" style="width:90%;"
+                          maxlength="2000" required></textarea>
+            </p>
+            {% if message.comment %}
+            <p class="error">
+                {{ message.comment }}
+            </p>
+            {% endif %}
+            {% if message.general %}
+            <p class="error">
+                {{ message.general }}
+            </p>
+            {% endif %}
+            <p>
+                <label for="field-3">E-Mail-Adresse</label><br>
+                <input type="text" placeholder="E-Mail-Adresse" id="field-3" name="field-3" maxlength="100" required>
+            </p>
+            <p>
+                <button type="submit">Kommentar senden</button>
+            </p>
+        </form>
     </article>
 </div>
 <div class="loose">

@@ -17,6 +17,12 @@
 <div class="row">
     <article>
         {% include 'parts/article.html' %}
+        <div class="comments">
+            <img src="assets/icons/icons8-comments-40.png" alt="Kommentare" \>
+            <a href="/articles/{{ article.pk_article }}#comments">{{ article.comments }} Kommentar{% if article.comments
+                != 1 %}e{% endif %}</a>
+            : <a href="/articles/{{ article.pk_article }}#add-comment">Kommentieren</a>
+        </div>
     </article>
 </div>
 {% endfor %}

@@ -5,6 +5,8 @@ let gallery = null;
 let last_scroll_position = 0;
 
 window.addEventListener("DOMContentLoaded", function () {
+    loadCreator();
+    loadCommentForm();
     setArticleEvents();
     lds_ripple.style.visibility = 'hidden';
     if (photo_gallery_left) {
@@ -18,6 +20,17 @@ window.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+function loadCreator() {
+    const creator = document.querySelector('.comment-form #field-1');
+    const currentCreator = localStorage.getItem("creator");
+    if (creator) {
+        if (currentCreator !== null) creator.value = currentCreator;
+        creator.addEventListener("blur", function () {
+            localStorage.setItem("creator", this.value);
+        });
+    }
+}
 
 function setArticleEvents() {
     document.querySelectorAll("main article .photos").forEach(function (article) {
@@ -95,4 +108,17 @@ function photoGallerySwipe(direction) {
     if (current_index === photos.length) current_index = 0;
     else if (current_index < 0) current_index = photos.length - 1;
     photos[current_index].style.zIndex = 1;
+}
+
+function loadCommentForm() {
+    window.setTimeout(function () {
+        let f = document.querySelector(".comment-form");
+        if (f) {
+            f.querySelector("p:nth-last-child(2) input").required = false;
+            let e = f.querySelector("p:nth-last-child(2)");
+            e.style.height = '1px';
+            e.style.overflow = 'hidden';
+            f.style.opacity = '1';
+        }
+    }, 100)
 }

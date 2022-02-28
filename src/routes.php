@@ -21,8 +21,7 @@ Route::add('/', function () {
 Route::add('/articles/([0-9]+)', function (int $pk_article) {
     $app = new App();
     $app->article($pk_article);
-}, ['get']);
-
+}, ['get', 'post']);
 
 Route::add('/photos/([0-9]+)/(tn/|)([0-9a-z]+)\.[a-z]+', function (int $pk_image, string $type, string $id) {
     $thumbnail = $type == 'tn/';

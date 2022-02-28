@@ -59,13 +59,23 @@ class Articles
     public static function getArticles(int $offset, int $row_count, int $published = 1): array
     {
         $sql = <<<EOD
-            select pk_article, title, content, created, published
+            select
+                pk_article,
+                title,
+                content,
+                created,
+                published,
+                (
+                    select count(*) from tbl_comments
+                    where fk_article = pk_article
+                    and ( published >= ? or creator_hash = ? )
+                ) as comments
             from tbl_articles
             where published >= ?
             order by created desc
             limit ?, ?;
         EOD;
-        $articles = Database::select($sql, 'iii', [$published, $offset, $row_count]);
+        $articles = Database::select($sql, 'isiii', [$published, IPHASH, $published, $offset, $row_count]);
         foreach ($articles as &$article) {
             $article['photos'] = Articles::getArticlePhotos($article['pk_article']);
             $article['created'] = Articles::convertUtcToCet($article['created'])->format('d.m.Y, H:i');
@@ -103,6 +113,21 @@ class Articles
             order by position, uploaded desc;
         EOD;
         return Database::select($sql, 'i', [$pk_article]);
+    }
+
+    public static function getArticleComments(int $pk_article, int $published = 1): array
+    {
+        $sql = <<<EOD
+            select creator, comment, creator_hash, created, published from tbl_comments
+            where fk_article = ?
+            and ( published >= ? or creator_hash = ? )
+            order by created desc;
+        EOD;
+        $comments = Database::select($sql, 'iis', [$pk_article, $published, IPHASH]);
+        foreach ($comments as &$comment) {
+            $comment['created'] = Articles::convertUtcToCet($comment['created'])->format('d.m.Y, H:i');
+        }
+        return $comments;
     }
 
     public static function deleteArticlePhotos(int $pk_article)
@@ -145,7 +170,7 @@ class Articles
         string $title,
         string $content,
         string $created,
-        int    $published)
+        int    $published): int
     {
         $sql = <<<EOD
             insert into tbl_articles

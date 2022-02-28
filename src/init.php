@@ -31,3 +31,15 @@ function console(mixed $mixed)
 if (isset($_SESSION['auth'])) {
     Auth::loadUser($_SESSION['auth']['pk_user']);
 }
+
+function getUserHash(): string
+{
+    $ip = $_SERVER["REMOTE_ADDR"];
+    $host = gethostbyaddr($ip);
+    if (!$host) $host = '';
+    $agent = @$_SERVER['HTTP_USER_AGENT'];
+    if (is_null($agent)) $agent = '';
+    return md5($ip . $host . $agent);
+}
+
+define("IPHASH", getUserHash());

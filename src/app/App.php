@@ -2,6 +2,7 @@
 
 namespace src\app;
 
+use src\utils\HTMLPurifierExtension;
 use Twig\Environment;
 use Twig\Extra\Markdown\DefaultMarkdown;
 use Twig\Extra\Markdown\MarkdownExtension;
@@ -20,12 +21,14 @@ class App
         $loader = new FilesystemLoader(BASE . 'templates');
         $this->twig = new Environment($loader);
         $this->twig->addExtension(new MarkdownExtension());
+        $this->twig->addExtension(new HTMLPurifierExtension());
         $this->twig->addRuntimeLoader(new class implements RuntimeLoaderInterface {
-            public function load($class)
+            public function load($class): ?MarkdownRuntime
             {
                 if (MarkdownRuntime::class === $class) {
                     return new MarkdownRuntime(new DefaultMarkdown());
                 }
+                return null;
             }
         });
     }
@@ -46,9 +49,10 @@ class App
             'description' => $description,
             'base_url' => URL,
             'url' => URL . $_SERVER['REQUEST_URI'],
+            'iphash' => IPHASH,
             'header_image_height' => $header_image_height,
             'header_image' => $header_image,
-            'version' => '?v12'
+            'version' => '?v13'
         ];
         echo $this->twig->render($site . '.html', array_merge($basic_parameters, $parameters));
     }
@@ -68,6 +72,37 @@ class App
         ]);
     }
 
+    private function add_comment(int $pk_article, array $article, array $data): ?array
+    {
+        $message = [];
+        // For Bots
+        if ($_SESSION['comment_timestamp'] + 3 > time() || (isset($data['email']) && strlen($data['email']) > 0))
+            $message['general'] = 'Es ist ein unbekannter Fehler aufgetreten. Versuche es später noch einmal.';
+        // For Users
+        if (!isset($data['field-1']) || $data['field-1'] == '')
+            $message['field-1'] = 'Bitte gib einen Namen ein.';
+        if (!isset($data['field-2']) || $data['field-2'] == '')
+            $message['field-2'] = 'Bitte gib einen Kommentar ein.';
+        if (isset($data['field-1']) && strlen($data['field-1']) > 100)
+            $message['field-1'] = 'Dein Name ist zu lang (maximal 100 Zeichen).';
+        if (isset($data['field-2']) && strlen($data['field-2']) > 2000)
+            $message['field-2'] = 'Dein Name ist zu lang (maximal 2000 Zeichen).';
+        if (count($message) == 0) {
+            $pk_comment = Comments::insertComment(
+                pk_article: $pk_article,
+                creator: $data['field-1'],
+                comment: $data['field-2'],
+                created: now()->format('c'),
+                published: Auth::isLoggedIn() ? 1 : 0
+            );
+            if (!Auth::isLoggedIn())
+                Telegram::sendMessageForNewComment($pk_comment, $data['field-1'], $data['field-2'], $article['title']);
+            header('Location: ' . URL . $_SERVER['REQUEST_URI'] . '#comments');
+            exit;
+        }
+        return $message;
+    }
+
     public function article(int $pk_article)
     {
         $article = Articles::getArticle($pk_article, Auth::isLoggedIn() ? 0 : 1);
@@ -75,13 +110,18 @@ class App
             http_response_code(404);
             exit;
         }
+        $message = [];
+        if (isset($_POST) && count($_POST) > 0) $message = $this->add_comment($pk_article, $article, $_POST);
+        else $_SESSION['comment_timestamp'] = time();
+        $article['comments'] = Articles::getArticleComments($article['pk_article'], Auth::isLoggedIn() ? 0 : 1);
         $header_image = HEADER_IMAGE;
         if (count($article['photos']) > 0) {
             $photo = $article['photos'][0];
             $header_image = '/photos/' . $photo['pk_photo'] . '/' . $photo['id'] . '.' . $photo['photo_type'];
         }
         $this->render('article', $article['title'] . '.', [
-            'article' => $article
+            'article' => $article,
+            'message' => $message
         ], header_image: $header_image, description: $article['title']);
     }
 
@@ -100,7 +140,6 @@ class App
 
     public function photo(int $pk_photo, string $id, bool $thumbnail)
     {
-        console([$pk_photo, $id, $thumbnail]);
         if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
             header('Last-Modified: ' . $_SERVER['HTTP_IF_MODIFIED_SINCE'], true, 304);
             exit;
