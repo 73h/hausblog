@@ -48,7 +48,7 @@ class App
             'url' => URL . $_SERVER['REQUEST_URI'],
             'header_image_height' => $header_image_height,
             'header_image' => $header_image,
-            'version' => '?v11'
+            'version' => '?v12'
         ];
         echo $this->twig->render($site . '.html', array_merge($basic_parameters, $parameters));
     }

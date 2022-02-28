@@ -25,43 +25,45 @@
     {% endif %}
 </head>
 <body>
-<header>
-    <div class="image"
-         style="height: {{ header_image_height }}em;background-image: url({{ header_image }});"></div>
-    <div class="header-content">
-        <div class="title">
-            <h1><a href="/">{{ title }}</a></h1>
-            <p>{{ subtitle }}</p>
+<div class="site">
+    <header>
+        <div class="image"
+             style="height: {{ header_image_height }}em;background-image: url({{ header_image }});"></div>
+        <div class="header-content">
+            <div class="title">
+                <h1><a href="/">{{ title }}</a></h1>
+                <p>{{ subtitle }}</p>
+            </div>
         </div>
-    </div>
-</header>
-<nav class="header-nav">
-    {% block navigation %}
-    {% endblock %}
-    {% block breadcrumb %}
-    {% endblock %}
-</nav>
-<main>
-    {% block content %}
-    {% endblock %}
-</main>
-<nav class="footer-nav">
-    {{ block('navigation') }}
-</nav>
-<footer>
-    <div class="footer-content">
-        <div class="meta-nav">
-            {% if not login_state %}
-            <a href="/login">Login</a> :
-            {% endif %}
-            {% if login_state %}
-            <a href="/cms">Redaktion</a> :
-            <a href="/logout">Logout</a> :
-            {% endif %}
-            <a href="https://icons8.com" target="_blank">Icons by Icons8</a>
+    </header>
+    <nav class="header-nav">
+        {% block navigation %}
+        {% endblock %}
+        {% block breadcrumb %}
+        {% endblock %}
+    </nav>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <nav class="footer-nav">
+        {{ block('navigation') }}
+    </nav>
+    <footer>
+        <div class="footer-content">
+            <div class="meta-nav">
+                {% if not login_state %}
+                <a href="/login">Login</a> :
+                {% endif %}
+                {% if login_state %}
+                <a href="/cms">Redaktion</a> :
+                <a href="/logout">Logout</a> :
+                {% endif %}
+                <a href="https://icons8.com" target="_blank">Icons by Icons8</a>
+            </div>
         </div>
-    </div>
-</footer>
+    </footer>
+</div>
 <div class="lds-ripple">
     <div></div>
     <div></div>
