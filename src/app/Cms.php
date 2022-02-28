@@ -10,7 +10,7 @@ class Cms extends App
         $message = '';
         if ($code !== null) {
             Auth::logInWithCode($code);
-            if (!Auth::isLoggedIn()) $message = 'Das Code ist ungültig oder abgelaufen.';
+            if (!Auth::isLoggedIn()) $message = 'Der Code ist ungültig oder abgelaufen.';
             else {
                 $_SESSION['auth']['pk_user'] = Auth::$pk_user;
                 header('Location: /cms/articles');
