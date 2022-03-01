@@ -52,7 +52,7 @@ class App
             'iphash' => IPHASH,
             'header_image_height' => $header_image_height,
             'header_image' => $header_image,
-            'version' => '?v13'
+            'version' => '?v14'
         ];
         echo $this->twig->render($site . '.html', array_merge($basic_parameters, $parameters));
     }
