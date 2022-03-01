@@ -19,6 +19,18 @@ create table tbl_articles_photos
     position         smallint not null
 );
 
+create table tbl_comments
+(
+    pk_comment   int auto_increment
+        primary key,
+    fk_article   int                  not null,
+    creator      varchar(100)         not null,
+    comment      varchar(2000)        not null,
+    creator_hash varchar(100)         not null,
+    created      datetime             not null,
+    published    tinyint(1) default 0 not null
+);
+
 create table tbl_logins
 (
     pk_login int auto_increment
@@ -54,6 +66,7 @@ create table tbl_users
 
 
 -- update all photo ids
+
 set sql_safe_updates = 0;
 update tbl_photos
 set id = left(md5(rand()), 16);
