@@ -25,13 +25,12 @@ final class HTMLPurifierExtension extends AbstractExtension
             'sub', 'sup',
             'ins', 'del',
             'ol', 'ul', 'li',
-            'h1', 'h2', 'h3',
             'dl', 'dd', 'dt',
             'pre', 'code', 'samp', 'kbd',
             'q', 'blockquote', 'abbr', 'cite',
             'table', 'thead', 'tbody', 'th', 'tr', 'td',
             'a[href | target | rel | id]',
-            'img[src | title | alt | width | height | style]'
+            'img[src | title | alt | width | height | style | class]'
         );
 
         $config = \HTMLPurifier_Config::createDefault();

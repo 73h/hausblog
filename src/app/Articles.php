@@ -32,6 +32,8 @@ class Articles
     public static function getEmoticons(): array
     {
         return [
+            'slightly-smiling-face',
+            'winking-face',
             'astonished-face',
             'dizzy-face',
             'flushed-face',
@@ -49,6 +51,17 @@ class Articles
 
     private static function replaceEmoticons(string $content): string
     {
+        $short_emoticons = [
+            ':)' => 'slightly-smiling-face',
+            ':-)' => 'slightly-smiling-face',
+            ';)' => 'winking-face',
+            ';-)' => 'winking-face',
+            ':D' => 'grinning-face-with-big-eyes',
+            ':-D' => 'grinning-face-with-big-eyes'
+        ];
+        foreach ($short_emoticons as $short => $emoticon) {
+            $content = str_replace($short, $emoticon, $content);
+        }
         $emoticons = Articles::getEmoticons();
         foreach ($emoticons as $emoticon) {
             $content = str_replace($emoticon, '<img src="/assets/icons/icons8-' . $emoticon . '-48.png" class="emoticon" alt="' . $emoticon . '">', $content);
@@ -96,7 +109,8 @@ class Articles
         if (count($articles) == 1) {
             $article = $articles[0];
             $article['photos'] = Articles::getArticlePhotos($article['pk_article']);
-            $article['created'] = Articles::convertUtcToCet($article['created'])->format('Y-m-d\TH:i');
+            $article['created'] = Articles::convertUtcToCet($article['created'])->format('d.m.Y, H:i');
+            $article['created_cms'] = Articles::convertUtcToCet($article['created'])->format('Y-m-d\TH:i');
             $article['rendered_content'] = Articles::replaceEmoticons($article['content']);
             return $article;
         }
@@ -126,6 +140,7 @@ class Articles
         $comments = Database::select($sql, 'iis', [$pk_article, $published, IPHASH]);
         foreach ($comments as &$comment) {
             $comment['created'] = Articles::convertUtcToCet($comment['created'])->format('d.m.Y, H:i');
+            $comment['comment'] = Articles::replaceEmoticons($comment['comment']);
         }
         return $comments;
     }
