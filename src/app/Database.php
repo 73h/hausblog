@@ -13,6 +13,7 @@ class Database
     function __construct()
     {
         $this->connection = new MySQLi($_ENV['DB_SERVER'], $_ENV['DB_USER'], $_ENV['DB_PASSWORD'], $_ENV['DB_NAME']);
+        $this->connection->set_charset('utf8mb4');
         if ($this->connection->connect_error) {
             error_log("Connection failed: " . $this->connection->connect_error);
             die("Database connection failed");
