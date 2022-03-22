@@ -42,4 +42,9 @@ function getUserHash(): string
     return md5($ip . $host . $agent);
 }
 
+function isProd(): bool
+{
+    return $_ENV['DB_SERVER'] == 'prod';
+}
+
 define("IPHASH", getUserHash());

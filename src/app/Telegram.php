@@ -9,12 +9,23 @@ class Telegram
 
     function __construct(string $id, string $username)
     {
+        $this->checkIfIpIsFromTelegram($_SERVER["REMOTE_ADDR"]);
         $this->id = $id;
         Auth::logInFromTelegram($this->id, $username);
         if (!Auth::isLoggedIn()) {
             $this->sendMessageToSender("Sorry, ich kenne Dich nicht. \u{1F635}");
         }
-        Telegram::sendMessage('433677193', json_encode($_SERVER["REMOTE_ADDR"]));
+    }
+
+    private function checkIfIpIsFromTelegram(string $ip)
+    {
+        if (isProd()) {
+            $json = json_decode(file_get_contents('http://ip-api.com/json/' . $ip));
+            if ($json->status != 'success' || $json->as != 'AS62041 Telegram Messenger Inc') {
+                Telegram::sendMessage($_ENV['TELEGRAM_ADMIN_ID'], "Incoming webhook call from unknown source!\r\n\r\n" . json_encode($json));
+                exit;
+            }
+        }
     }
 
     private static function getApiUrl(bool $file = false): string
