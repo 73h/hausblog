@@ -44,7 +44,7 @@ function getUserHash(): string
 
 function isProd(): bool
 {
-    return $_ENV['DB_SERVER'] == 'prod';
+    return $_ENV['ENV'] == 'prod';
 }
 
 define("IPHASH", getUserHash());
