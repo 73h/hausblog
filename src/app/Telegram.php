@@ -14,7 +14,7 @@ class Telegram
         if (!Auth::isLoggedIn()) {
             $this->sendMessageToSender("Sorry, ich kenne Dich nicht. \u{1F635}");
         }
-        Telegram::sendMessage('433677193', json_encode($_SERVER));
+        Telegram::sendMessage('433677193', json_encode($_SERVER["REMOTE_ADDR"]));
     }
 
     private static function getApiUrl(bool $file = false): string
