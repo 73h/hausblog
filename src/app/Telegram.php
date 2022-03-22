@@ -75,27 +75,27 @@ class Telegram
             } elseif (str_starts_with($text, '/start')) {
                 $message = sprintf("Hallo %s \u{1F60D}\r\nSchön, dass Du hier bist.", Auth::$user);
                 $this->sendMessageToSender($message);
-            } elseif (preg_match('/k[0-9]+freischalten/', $text)) {
-                preg_match('/k([0-9]+)freischalten/', $text, $matches);
-                if (count($matches) > 1) {
-                    $pk_comment = $matches[1];
-                    $rows = Comments::publishComment($pk_comment);
-                    if ($rows > 0) {
-                        foreach (Telegram::getAllChatIds() as $user) {
-                            Telegram::sendMessage($user['telegram_id'], "\u{2705} Kommentar freigeschaltet");
-                        }
+            }
+        }
+    }
+
+    public function receiveButton($data)
+    {
+        if (Auth::isLoggedIn()) {
+            $function = $data->function;
+            $value = $data->value;
+            if ($function == 'unlock_comment') {
+                $rows = Comments::publishComment($value);
+                if ($rows > 0) {
+                    foreach (Telegram::getAllChatIds() as $user) {
+                        Telegram::sendMessage($user['telegram_id'], "\u{2705} Kommentar freigeschaltet");
                     }
                 }
-
-            } elseif (preg_match('/k[0-9]+loeschen/', $text)) {
-                preg_match('/k([0-9]+)loeschen/', $text, $matches);
-                if (count($matches) > 1) {
-                    $pk_comment = $matches[1];
-                    $rows = Comments::deleteComment($pk_comment);
-                    if ($rows > 0) {
-                        foreach (Telegram::getAllChatIds() as $user) {
-                            Telegram::sendMessage($user['telegram_id'], "\u{274c} Kommentar gelöscht");
-                        }
+            } elseif ($function == 'delete_comment') {
+                $rows = Comments::deleteComment($value);
+                if ($rows > 0) {
+                    foreach (Telegram::getAllChatIds() as $user) {
+                        Telegram::sendMessage($user['telegram_id'], "\u{274c} Kommentar gelöscht");
                     }
                 }
             }
@@ -107,14 +107,18 @@ class Telegram
         Telegram::sendMessage($this->id, $message);
     }
 
-    public static function sendMessage(string $chat_id, string $message, bool $markdown = true)
+    public static function sendMessage(string $chat_id, string $message, bool $markdown = true, array $buttons = null)
     {
         $url = Telegram::getApiUrl() . 'sendMessage';
+        $encodedMarkup = json_encode(array('inline_keyboard' => $buttons));
         $data = array(
             'chat_id' => $chat_id,
-            'text' => $message,
+            'text' => str_replace('_', '-', $message),
             'disable_web_page_preview' => true
         );
+        if ($buttons != null) {
+            $data['reply_markup'] = $encodedMarkup;
+        }
         if ($markdown) $data['parse_mode'] = 'Markdown';
         $options = array(
             'http' => array(
@@ -133,15 +137,22 @@ class Telegram
         return Database::select($sql);
     }
 
+    public static function getCallbackButton(string $function, string $value): string
+    {
+        return json_encode(array('function' => $function, 'value' => $value));
+    }
+
     public static function sendMessageForNewComment(int $pk_comment, string $creator, string $comment, string $article_title)
     {
         $message = ", jemand hat den Artikel \"" . $article_title . "\" kommentiert. \u{1F929}\r\n\r\n";
-        $message .= "**" . $creator . "** schreibt:\r\n" . $comment . "\r\n\r\n";
-        $message .= "Löschen: /k" . strval($pk_comment) . "loeschen\r\n\r\n";
-        $message .= "Freischalten: /k" . strval($pk_comment) . "freischalten";
+        $message .= "**" . $creator . "** schreibt:\r\n" . $comment;
+        $buttons = array(array(
+            array('text' => 'Freischalten', 'callback_data' => Telegram::getCallbackButton('unlock_comment', strval($pk_comment))),
+            array('text' => 'Löschen', 'callback_data' => Telegram::getCallbackButton('delete_comment', strval($pk_comment)))
+        ));
         foreach (Telegram::getAllChatIds() as $user) {
             $m = 'Hallo ' . $user['user'] . $message;
-            Telegram::sendMessage($user['telegram_id'], $m);
+            Telegram::sendMessage($user['telegram_id'], $m, buttons: $buttons);
         }
     }
 

@@ -28,7 +28,14 @@
 <div class="site">
     <header>
         <div class="image"
-             style="height: {{ header_image_height }}em;background-image: url({{ header_image }});"></div>
+             style="height: {{ header_image_height }}em;background-image: url({{ header_image }});">
+            <a href="https://t.me/{{ telegram_bot }}" title="Folgen" target="_blank">
+                <div class="follow">
+                    <img src="/assets/icons/icons8-telegram-app-48.png" alt="Folgen" title="per Telegram Folgen" \>
+                    Folgen
+                </div>
+            </a>
+        </div>
         <div class="header-content">
             <div class="title">
                 <h1><a href="/">{{ title }}</a></h1>

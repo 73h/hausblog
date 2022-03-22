@@ -52,7 +52,8 @@ class App
             'iphash' => IPHASH,
             'header_image_height' => $header_image_height,
             'header_image' => $header_image,
-            'version' => '?v14'
+            'version' => '?v14',
+            'telegram_bot' => 'haus_bad_freienwalde' . (isProd() ? '' : '_dev') . '_bot'
         ];
         echo $this->twig->render($site . '.html', array_merge($basic_parameters, $parameters));
     }
@@ -134,6 +135,13 @@ class App
                 $telegram->receivePhoto($data['message']['photo']);
             } elseif (array_key_exists('text', $data['message']) && array_key_exists('entities', $data['message'])) {
                 $telegram->receiveCommand($data['message']['text']);
+            }
+        }
+        if (array_key_exists('callback_query', $data) && array_key_exists('from', $data['callback_query'])) {
+            $from = $data['callback_query']['from'];
+            $telegram = new Telegram($from['id'], $from['username']);
+            if (array_key_exists('data', $data['callback_query'])) {
+                $telegram->receiveButton(json_decode($data['callback_query']['data']));
             }
         }
     }
