@@ -169,4 +169,16 @@ class App
         echo $photo['photo'];
     }
 
+    public function sitemap()
+    {
+        header("Content-type: text/xml");
+        $articles = Articles::getArticles(0, 100000);
+        $static_urls = [['loc' => URL, 'lastmod' => $articles[0]['created_iso']]];
+        echo $this->twig->render('sitemap.xml', [
+            'base_url' => URL,
+            'static_urls' => $static_urls,
+            'articles' => $articles
+        ]);
+    }
+
 }

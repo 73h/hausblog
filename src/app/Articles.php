@@ -3,6 +3,7 @@
 namespace src\app;
 
 use DateTime;
+use DateTimeInterface;
 use DateTimeZone;
 
 class Articles
@@ -91,6 +92,7 @@ class Articles
         $articles = Database::select($sql, 'isiii', [$published, IPHASH, $published, $offset, $row_count]);
         foreach ($articles as &$article) {
             $article['photos'] = Articles::getArticlePhotos($article['pk_article']);
+            $article['created_iso'] = Articles::convertUtcToCet($article['created'])->format(DateTimeInterface::ATOM);
             $article['created'] = Articles::convertUtcToCet($article['created'])->format('d.m.Y, H:i');
             $article['rendered_content'] = Articles::replaceEmoticons($article['content']);
         }
@@ -109,8 +111,8 @@ class Articles
         if (count($articles) == 1) {
             $article = $articles[0];
             $article['photos'] = Articles::getArticlePhotos($article['pk_article']);
-            $article['created'] = Articles::convertUtcToCet($article['created'])->format('d.m.Y, H:i');
             $article['created_cms'] = Articles::convertUtcToCet($article['created'])->format('Y-m-d\TH:i');
+            $article['created'] = Articles::convertUtcToCet($article['created'])->format('d.m.Y, H:i');
             $article['rendered_content'] = Articles::replaceEmoticons($article['content']);
             return $article;
         }

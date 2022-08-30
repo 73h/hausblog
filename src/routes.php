@@ -98,4 +98,14 @@ Route::add('/cms/photos/([0-9]+)/delete', function (int $pk_photo) {
     $app->cms_photo_delete($pk_photo);
 }, ['get']);
 
+Route::add('/robots.txt', function () {
+    header('Content-Type:text/plain');
+    echo "User-Agent: *\r\nDisallow: /login\r\nSitemap: " . URL . "/sitemap.xml";
+}, ['get']);
+
+Route::add('/sitemap.xml', function () {
+    $app = new App();
+    $app->sitemap();
+}, ['get']);
+
 Route::run('/');
