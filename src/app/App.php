@@ -77,6 +77,10 @@ class App
     {
         $message = [];
         // For Bots
+        if (isset($data['field-1']) && str_contains($data['field-1'], 'CrytoAssox')) {
+            http_response_code(500);
+            exit;
+        }
         if ($_SESSION['comment_timestamp'] + 3 > time() || (isset($data['email']) && strlen($data['email']) > 0))
             $message['general'] = 'Es ist ein unbekannter Fehler aufgetreten. Versuche es später noch einmal.';
         // For Users
@@ -87,7 +91,7 @@ class App
         if (isset($data['field-1']) && strlen($data['field-1']) > 100)
             $message['field-1'] = 'Dein Name ist zu lang (maximal 100 Zeichen).';
         if (isset($data['field-2']) && strlen($data['field-2']) > 2000)
-            $message['field-2'] = 'Dein Name ist zu lang (maximal 2000 Zeichen).';
+            $message['field-2'] = 'Dein Kommentar ist zu lang (maximal 2000 Zeichen).';
         if (count($message) == 0) {
             $pk_comment = Comments::insertComment(
                 pk_article: $pk_article,
