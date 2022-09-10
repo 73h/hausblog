@@ -77,12 +77,15 @@ class App
     {
         $message = [];
         // For Bots
-        if (isset($data['field-1']) && str_contains($data['field-1'], 'CrytoAssox')) {
-            http_response_code(500);
-            exit;
-        }
-        if ($_SESSION['comment_timestamp'] + 3 > time() || (isset($data['email']) && strlen($data['email']) > 0))
+        if (
+            $_SESSION['comment_timestamp'] + 3 > time() ||
+            (isset($data['field-3']) && strlen($data['field-3']) > 0) ||
+            (isset($data['field-1']) && str_contains($data['field-1'], 'CrytoAssox'))
+        ) {
+            $error_message = 'Comment blocked: ' . json_encode($data);
+            error_log($error_message);
             $message['general'] = 'Es ist ein unbekannter Fehler aufgetreten. Versuche es später noch einmal.';
+        }
         // For Users
         if (!isset($data['field-1']) || $data['field-1'] == '')
             $message['field-1'] = 'Bitte gib einen Namen ein.';
