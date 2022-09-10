@@ -70,6 +70,16 @@ class Articles
         return $content;
     }
 
+    private static function createEmbeddedVideos(string $content): string
+    {
+        preg_match_all('/YT\((.+)\)/', $content, $videos, PREG_SET_ORDER);
+        foreach ($videos as $video) {
+            $content = str_replace($video[0], '<div class="embedded-videos"><iframe src="https://www.youtube.com/embed/' . $video[1] . '" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>', $content);
+            console($video);
+        }
+        return $content;
+    }
+
     public static function getArticles(int $offset, int $row_count, int $published = 1): array
     {
         $sql = <<<EOD
@@ -94,7 +104,10 @@ class Articles
             $article['photos'] = Articles::getArticlePhotos($article['pk_article']);
             $article['created_iso'] = Articles::convertUtcToCet($article['created'])->format(DateTimeInterface::ATOM);
             $article['created'] = Articles::convertUtcToCet($article['created'])->format('d.m.Y, H:i');
-            $article['rendered_content'] = Articles::replaceEmoticons($article['content']);
+            $rendered_content = $article['content'];
+            $rendered_content = Articles::replaceEmoticons($rendered_content);
+            $rendered_content = Articles::createEmbeddedVideos($rendered_content);
+            $article['rendered_content'] = $rendered_content;
         }
         return $articles;
     }
@@ -113,7 +126,10 @@ class Articles
             $article['photos'] = Articles::getArticlePhotos($article['pk_article']);
             $article['created_cms'] = Articles::convertUtcToCet($article['created'])->format('Y-m-d\TH:i');
             $article['created'] = Articles::convertUtcToCet($article['created'])->format('d.m.Y, H:i');
-            $article['rendered_content'] = Articles::replaceEmoticons($article['content']);
+            $rendered_content = $article['content'];
+            $rendered_content = Articles::replaceEmoticons($rendered_content);
+            $rendered_content = Articles::createEmbeddedVideos($rendered_content);
+            $article['rendered_content'] = $rendered_content;
             return $article;
         }
         return null;

@@ -52,7 +52,7 @@ class App
             'iphash' => IPHASH,
             'header_image_height' => $header_image_height,
             'header_image' => $header_image,
-            'version' => '?v15',
+            'version' => '?v16',
             'telegram_bot' => 'haus_bad_freienwalde' . (isProd() ? '' : '_dev') . '_bot'
         ];
         echo $this->twig->render($site . '.html', array_merge($basic_parameters, $parameters));

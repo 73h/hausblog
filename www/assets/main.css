@@ -368,3 +368,15 @@ main article .created img {
 .article-content {
     font-size: 1.1em;
 }
+
+.embedded-videos iframe {
+    width: 600px;
+    height: calc(600px * 0.75);
+}
+
+@media only screen and (max-width: 1100px) {
+    .embedded-videos iframe {
+        width: 100%;
+        height: calc(100vw * 0.75);
+    }
+}
