@@ -12,5 +12,6 @@ if (preg_match('/^\/?assets\/.+/', $uri) || preg_match('/\.ico/', $uri)) {
     return false;
 } else {
     chdir('www/');
+    $_SESSION['auth']['pk_user'] = 1;
     require 'index.php';
 }
