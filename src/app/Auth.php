@@ -24,7 +24,8 @@ class Auth
         $sql = <<<EOD
             select pk_user, user from tbl_users
                 where telegram_id = ?
-                and telegram_username = ?;
+                and telegram_username = ?
+                and role in ('Admin','Editor');
         EOD;
         $users = Database::select($sql, 'ss', [$id, $username]);
         if (count($users) == 1) {

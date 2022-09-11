@@ -135,6 +135,7 @@ class App
 
     public function webhook(array $data)
     {
+        //console($data);
         if (array_key_exists('message', $data) && array_key_exists('from', $data['message'])) {
             $from = $data['message']['from'];
             $telegram = new Telegram($from['id'], $from['username']);
@@ -142,6 +143,8 @@ class App
                 $telegram->receivePhoto($data['message']['photo']);
             } elseif (array_key_exists('text', $data['message']) && array_key_exists('entities', $data['message'])) {
                 $telegram->receiveCommand($data['message']['text']);
+            } elseif (array_key_exists('text', $data['message']) && array_key_exists('reply_to_message', $data['message'])) {
+                $telegram->receiveTextReply($data['message']['text'], $data['message']['reply_to_message']['text']);
             }
         }
         if (array_key_exists('callback_query', $data) && array_key_exists('from', $data['callback_query'])) {

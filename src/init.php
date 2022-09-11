@@ -47,4 +47,9 @@ function isProd(): bool
     return $_ENV['ENV'] == 'prod';
 }
 
+function cleanString(string $string): string
+{
+    return preg_replace("/[^A-Za-z0-9 ]/", '', $string);
+}
+
 define("IPHASH", getUserHash());
