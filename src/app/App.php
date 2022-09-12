@@ -43,7 +43,7 @@ class App
     )
     {
         $basic_parameters = [
-            'login_state' => Auth::isLoggedIn(),
+            'login_state' => Auth::isEditor(),
             'title' => 'Hausblog - Jessi & Heiko',
             'subtitle' => $subtitle,
             'description' => $description,
@@ -61,8 +61,8 @@ class App
     public function index(?int $page)
     {
         $offset = ($page != null ? $page : 0) * ROW_COUNT;
-        $articles_count = Articles::getArticlesCount(Auth::isLoggedIn() ? 0 : 1);
-        $articles = Articles::getArticles($offset, ROW_COUNT, Auth::isLoggedIn() ? 0 : 1);
+        $articles_count = Articles::getArticlesCount(Auth::isEditor() ? 0 : 1);
+        $articles = Articles::getArticles($offset, ROW_COUNT, Auth::isEditor() ? 0 : 1);
         $this->render('index', 'Der Weg in unser eigenes Haus.', [
             'articles' => $articles,
             'articles_count' => $articles_count,
@@ -101,9 +101,9 @@ class App
                 creator: $data['field-1'],
                 comment: $data['field-2'],
                 created: now()->format('c'),
-                published: Auth::isLoggedIn() ? 1 : 0
+                published: Auth::isEditor() ? 1 : 0
             );
-            if (!Auth::isLoggedIn())
+            if (!Auth::isEditor())
                 Telegram::sendMessageForNewComment($pk_comment, $data['field-1'], $data['field-2'], $article['title']);
             header('Location: ' . URL . $_SERVER['REQUEST_URI'] . '#comments');
             exit;
@@ -113,7 +113,7 @@ class App
 
     public function article(int $pk_article)
     {
-        $article = Articles::getArticle($pk_article, Auth::isLoggedIn() ? 0 : 1);
+        $article = Articles::getArticle($pk_article, Auth::isEditor() ? 0 : 1);
         if ($article == null) {
             http_response_code(404);
             exit;
@@ -121,7 +121,7 @@ class App
         $message = [];
         if (isset($_POST) && count($_POST) > 0) $message = $this->add_comment($pk_article, $article, $_POST);
         else $_SESSION['comment_timestamp'] = time();
-        $article['comments'] = Articles::getArticleComments($article['pk_article'], Auth::isLoggedIn() ? 0 : 1);
+        $article['comments'] = Articles::getArticleComments($article['pk_article'], Auth::isEditor() ? 0 : 1);
         $header_image = HEADER_IMAGE;
         if (count($article['photos']) > 0) {
             $photo = $article['photos'][0];
@@ -135,21 +135,24 @@ class App
 
     public function webhook(array $data)
     {
-        //console($data);
         if (array_key_exists('message', $data) && array_key_exists('from', $data['message'])) {
             $from = $data['message']['from'];
-            $telegram = new Telegram($from['id'], $from['username']);
+            $telegram = new Telegram($from['id'], ($from['username'] ?? null));
             if (array_key_exists('photo', $data['message'])) {
                 $telegram->receivePhoto($data['message']['photo']);
             } elseif (array_key_exists('text', $data['message']) && array_key_exists('entities', $data['message'])) {
                 $telegram->receiveCommand($data['message']['text']);
             } elseif (array_key_exists('text', $data['message']) && array_key_exists('reply_to_message', $data['message'])) {
                 $telegram->receiveTextReply($data['message']['text'], $data['message']['reply_to_message']['text']);
+            } elseif (array_key_exists('text', $data['message'])) {
+                $telegram->receiveText($data['message']['text']);
+            } else {
+                $telegram->receive();
             }
         }
         if (array_key_exists('callback_query', $data) && array_key_exists('from', $data['callback_query'])) {
             $from = $data['callback_query']['from'];
-            $telegram = new Telegram($from['id'], $from['username']);
+            $telegram = new Telegram($from['id'], ($from['username'] ?? null));
             if (array_key_exists('data', $data['callback_query'])) {
                 $telegram->receiveButton(json_decode($data['callback_query']['data']));
             }

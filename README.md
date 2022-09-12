@@ -8,3 +8,9 @@ Use ngrok for local development
 
     ngrok http -region eu 8081
 
+Telegram Bot Commands
+
+    login - Anmelden
+    stop - Nicht mehr folgen
+    follow - Folgen
+    name - Name ändern

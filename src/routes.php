@@ -7,7 +7,7 @@ use Steampixel\Route;
 
 function redirectWhenNotAuth()
 {
-    if (!Auth::isLoggedIn()) {
+    if (!Auth::isEditor()) {
         header('Location: ' . URL);
         exit;
     }

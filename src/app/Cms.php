@@ -10,7 +10,7 @@ class Cms extends App
         $message = '';
         if ($code !== null) {
             Auth::logInWithCode($code);
-            if (!Auth::isLoggedIn()) $message = 'Der Code ist ungültig oder abgelaufen.';
+            if (!Auth::isEditor()) $message = 'Der Code ist ungültig oder abgelaufen.';
             else {
                 $_SESSION['auth']['pk_user'] = Auth::$pk_user;
                 header('Location: /cms/articles');
@@ -45,7 +45,7 @@ class Cms extends App
     public function cms_article(?int $pk_article)
     {
         $message = '';
-        if ($pk_article !== null) $article = Articles::getArticle($pk_article, Auth::isLoggedIn() ? 0 : 1);
+        if ($pk_article !== null) $article = Articles::getArticle($pk_article, Auth::isEditor() ? 0 : 1);
         else {
             $article = [
                 'created' => now_cet()->format('Y-m-d\TH:i'),

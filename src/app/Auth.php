@@ -7,6 +7,10 @@ class Auth
 
     public static ?int $pk_user = null;
     public static ?string $user = null;
+    public static ?string $telegram_username = null;
+    public static bool $admin = false;
+    public static bool $editor = false;
+    public static bool $follower = false;
 
     private static string $sql_login_with_code = <<<EOD
             select * from tbl_logins
@@ -14,24 +18,50 @@ class Auth
             and used = 0 and code = ?;
         EOD;
 
-    public static function isLoggedIn(): bool
+    public static function isKnown(): bool
     {
         return Auth::$pk_user != null;
     }
 
-    public static function logInFromTelegram(string $id, string $username)
+    public static function isUnknown(): bool
+    {
+        return Auth::$pk_user == null;
+    }
+
+    public static function isAdmin(): bool
+    {
+        return Auth::$pk_user != null && Auth::$admin;
+    }
+
+    public static function isEditor(): bool
+    {
+        return Auth::$pk_user != null && Auth::$editor;
+    }
+
+    public static function isFollower(): bool
+    {
+        return Auth::$pk_user != null && Auth::$follower;
+    }
+
+    public static function logInFromTelegram(string $id, ?string $username)
     {
         $sql = <<<EOD
-            select pk_user, user from tbl_users
+            select pk_user, user, telegram_username, role from tbl_users
                 where telegram_id = ?
-                and telegram_username = ?
-                and role in ('Admin','Editor');
+                and ( telegram_username = ? or ( telegram_username is null and ? is null) );
         EOD;
-        $users = Database::select($sql, 'ss', [$id, $username]);
-        if (count($users) == 1) {
-            Auth::$pk_user = $users[0]['pk_user'];
-            Auth::$user = $users[0]['user'];
-        }
+        $users = Database::select($sql, 'sss', [$id, $username, $username]);
+        if (count($users) == 1) self::loadUserDataFromDatabaseResult($users[0]['pk_user'], $users[0]);
+    }
+
+    public static function loadUserDataFromDatabaseResult($pk_user, $user): void
+    {
+        Auth::$pk_user = $pk_user;
+        Auth::$user = $user['user'];
+        Auth::$telegram_username = $user['telegram_username'];
+        Auth::$admin = ($user['role'] == 'Admin');
+        Auth::$editor = ($user['role'] == 'Editor' || Auth::$admin);
+        Auth::$follower = ($user['role'] == 'Follower' || Auth::$editor);
     }
 
     private static function getLoginCode(): string
@@ -61,12 +91,9 @@ class Auth
 
     public static function loadUser(int $pk_user)
     {
-        $sql = "select user from tbl_users where pk_user = ?;";
+        $sql = "select user, telegram_username, role from tbl_users where pk_user = ?;";
         $users = Database::select($sql, 'i', [$pk_user]);
-        if (count($users) == 1) {
-            Auth::$pk_user = $pk_user;
-            Auth::$user = $users[0]['user'];
-        }
+        if (count($users) == 1) self::loadUserDataFromDatabaseResult($pk_user, $users[0]);
     }
 
     private static function discardLogin(int $pk_login)
@@ -82,6 +109,36 @@ class Auth
             Auth::loadUser($logins[0]['fk_user']);
             Auth::discardLogin($logins[0]['pk_login']);
         }
+    }
+
+    public static function createUser(
+        string $user,
+        string $telegram_id,
+        string $telegram_username)
+    {
+        $sql = <<<EOD
+            insert into tbl_users
+                (user, telegram_id, telegram_username)
+                values (?, ?, ?);
+        EOD;
+        $parameters = [
+            $user,
+            $telegram_id,
+            $telegram_username
+        ];
+        Database::insert($sql, 'sss', $parameters);
+    }
+
+    public static function setUserRole(int $pk_user, ?string $role)
+    {
+        $sql = "update tbl_users set role = ? where pk_user = ?;";
+        Database::update_or_delete($sql, 'si', [$role, $pk_user]);
+    }
+
+    public static function setUserName(int $pk_user, string $name)
+    {
+        $sql = "update tbl_users set user = ? where pk_user = ?;";
+        Database::update_or_delete($sql, 'si', [$name, $pk_user]);
     }
 
 }

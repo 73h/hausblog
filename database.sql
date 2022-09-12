@@ -58,12 +58,11 @@ create table tbl_users
 (
     pk_user           int auto_increment
         primary key,
-    user              varchar(20)          not null,
-    email             varchar(100)         null,
-    telegram_id       int                  null,
-    telegram_username varchar(255)         null,
-    role              varchar(20)          null,
-    approved          tinyint(1) default 0 null
+    user              varchar(100) not null,
+    email             varchar(100) null,
+    telegram_id       int          null,
+    telegram_username varchar(255) null,
+    role              varchar(20)  null
 );
 
 
@@ -75,8 +74,10 @@ set id = left(md5(rand()), 16);
 set sql_safe_updates = 1;
 
 
--- add columns for telegram-follow-mode
+-- alter tbl_users for telegram-follow-mode
 
 ALTER TABLE tbl_users
-    ADD COLUMN role     VARCHAR(20) NULL AFTER telegram_username,
-    ADD COLUMN approved TINYINT(1)  NULL DEFAULT 0 AFTER role;
+    ADD COLUMN role VARCHAR(20) NULL AFTER telegram_username;
+
+ALTER TABLE tbl_users
+    CHANGE COLUMN user user VARCHAR(100) NOT NULL;

@@ -8,7 +8,8 @@ class Telegram
     private int $id;
     private string $username;
     private array $questions = array(
-        'new_user' => "Hallo, ich kenne Dich noch nicht.\r\nWie darf ich Dich nennen?"
+        'name' => "Wie darf ich Dich nennen?",
+        'code' => "Wie lautet der Code?"
     );
 
     function __construct(string $id, string $username)
@@ -49,12 +50,23 @@ class Telegram
 
     private function sendNotAllowedInfo()
     {
-        $this->sendMessageToSender("Die Funktion ist nicht für Dich freigeschaltet. \u{1F635}");
+        $this->sendMessageToSender("Die Funktion ist nicht für Dich freigeschaltet. \u{1F6B7}");
+    }
+
+    private function sendUnknownInfo()
+    {
+        if (Auth::isKnown()) $this->sendMessageToSender("Sorry, damit kann ich noch nichts anfangen. \u{1F635}");
+    }
+
+    private function sendNameQuestion($message)
+    {
+        $this->sendMessageToSender($message);
+        $this->sendMessageToSender($this->questions['name'], reply_field: 'Dein Name');
     }
 
     public function receivePhoto(array $photo_list)
     {
-        if (Auth::isLoggedIn()) {
+        if (Auth::isEditor()) {
             $photo = $this->getPhoto($photo_list[count($photo_list) - 1]);
             $thumbnail = $this->getPhoto($photo_list[1]);
             $title = uniqid();
@@ -68,64 +80,123 @@ class Telegram
                 photo_type: $photo->type
             );
             $this->sendMessageToSender("Danke " . Auth::$user . ", das Bild hab ich gespeichert. \u{1F680}");
-        }
+        } else $this->sendNotAllowedInfo();
     }
 
     public function receiveCommand(string $text)
     {
         if (str_starts_with($text, '/login')) {
-            if (Auth::isLoggedIn()) {
-                $code = Auth::createLoginCode();
-                $message = sprintf("Hallo %s \u{1F60D}\r\n\r\nHier ist Dein Anmeldecode: ```%s```", Auth::$user, $code);
-                $message .= sprintf("\r\n\r\n%s/login/%s", URL, $code);
-                $this->sendMessageToSender($message);
-            } else {
-                $this->sendNotAllowedInfo();
-            }
+            if (Auth::isEditor()) {
+                $this->sendMessageToSender(sprintf("Hallo %s \u{1F60D}", Auth::$user));
+                $this->sendMessageToSender($this->questions['code'], reply_field: 'Code');
+            } else $this->sendNotAllowedInfo();
         } elseif (str_starts_with($text, '/start')) {
-            if (Auth::isLoggedIn()) {
-                $message = sprintf("Hallo %s \u{1F60D}\r\nSchön, dass Du hier bist.", Auth::$user);
+            if (Auth::isKnown()) {
+                $message = sprintf("Hallo %s \u{1F60D}\r\nSchön, dass Du vorbei schaust.", Auth::$user);
                 $this->sendMessageToSender($message);
-            } else {
-                $this->sendMessageToSender($this->questions['new_user'], reply_field: 'Dein Name');
-            }
+            } else $this->sendNameQuestion('Ich kenne Dich noch nicht.');
+        } elseif (str_starts_with($text, '/follow')) {
+            if (Auth::isKnown()) {
+                if (!Auth::isFollower()) {
+                    $this->follow();
+                } else $this->sendMessageToSender("Du folgst uns bereits. \u{1F60D}");
+            } else $this->sendNameQuestion('Ich kenne Dich noch nicht.');
+        } elseif (str_starts_with($text, '/stop')) {
+            if (Auth::isKnown()) {
+                if (Auth::isFollower()) {
+                    if (Auth::isEditor() || Auth::isAdmin()) {
+                        $this->sendMessageToSender("Das geht nicht, Du bist zu wichtig. \u{1F92A}");
+                    } else {
+                        Auth::setUserRole(Auth::$pk_user, null);
+                        $this->sendMessageToSender("Du folgst uns jetzt nicht mehr. \u{1F641}");
+                    }
+                } else $this->sendMessageToSender("Du folgst uns bereits nicht mehr. \u{1F641}");
+            } else $this->sendNameQuestion('Ich kenne Dich noch nicht.');
+        } elseif (str_starts_with($text, '/name')) {
+            if (Auth::isKnown()) {
+                $this->sendNameQuestion('Du möchtest Deinen Namen ändern.');
+            } else $this->sendNameQuestion('Ich kenne Dich noch nicht.');
+        } else {
+            if (Auth::isUnknown()) $this->sendNameQuestion('Ich kenne Dich noch nicht.');
+            $this->sendUnknownInfo();
         }
+    }
+
+    private function isQuestion(string $replay_question, string $question): bool
+    {
+        return (preg_replace("/[^A-Za-z0-9 ]/", '', $replay_question) == preg_replace("/[^A-Za-z0-9 ]/", '', ($this->questions[$question])));
     }
 
     public function receiveTextReply(string $text, string $question)
     {
-        if (cleanString($question) == cleanString($this->questions['new_user'])) {
-            // ToDo: Neuen User speichern und fragen ob er folgen möchte.
-            console($text); // Username
-        }
+        if ($this->isQuestion($question, 'code')) {
+            if ($text == $_ENV['CMS_CODE']) {
+                $code = Auth::createLoginCode();
+                $message = sprintf("Hier ist Dein Anmeldecode: ```%s```", $code);
+                $message .= sprintf("\r\n\r\n%s/login/%s", URL, $code);
+                $this->sendMessageToSender($message);
+            }
+        } else if ($this->isQuestion($question, 'name')) {
+            if (strlen($text) > 100) {
+                $this->sendNameQuestion('Dein Name ist leider zu lang. Er sollte maximal 100 Zeichen haben.');
+            } else {
+                if (Auth::isUnknown()) {
+                    Auth::createUser($text, $this->id, $this->username);
+                    $message = sprintf("Hallo %s, nett Dich kennen zu lernen. \u{1F44A} Ich bin der Bot von Jessi und Heikos Hausblog. \u{1F916} Möchtest Du uns folgen und bei neuen Einträgen eine Info von mir bekommen?", $text);
+                    $buttons = array(array(
+                        array('text' => 'Ja, ich möchte.', 'callback_data' => Telegram::getCallbackButton('follow', 'yes')),
+                        array('text' => 'Nein', 'callback_data' => Telegram::getCallbackButton('follow', 'no'))
+                    ));
+                    $this->sendMessageToSender($message, buttons: $buttons);
+                } else {
+                    Auth::setUserName(Auth::$pk_user, $text);
+                    $message = sprintf("Ab sofort nenne ich Dich %s. \u{1F642}", $text);
+                    $this->sendMessageToSender($message);
+                }
+            }
+        } else $this->sendUnknownInfo();
+    }
+
+    public function receiveText(string $text)
+    {
+        if (Auth::isUnknown()) $this->sendNameQuestion('Ich kenne Dich noch nicht.');
+        $this->sendUnknownInfo();
+    }
+
+    public function receive()
+    {
+        if (Auth::isUnknown()) $this->sendNameQuestion('Ich kenne Dich noch nicht.');
+        $this->sendUnknownInfo();
     }
 
     public function receiveButton($data)
     {
-        if (Auth::isLoggedIn()) {
-            $function = $data->function;
-            $value = $data->value;
-            if ($function == 'unlock_comment') {
-                $rows = Comments::publishComment($value);
-                if ($rows > 0) {
-                    foreach (Telegram::getAllEditorChatIds() as $user) {
-                        Telegram::sendMessage($user['telegram_id'], "\u{2705} Kommentar freigeschaltet");
-                    }
-                }
-            } elseif ($function == 'delete_comment') {
-                $rows = Comments::deleteComment($value);
-                if ($rows > 0) {
-                    foreach (Telegram::getAllEditorChatIds() as $user) {
-                        Telegram::sendMessage($user['telegram_id'], "\u{274c} Kommentar gelöscht");
-                    }
+
+        $function = $data->function;
+        $value = $data->value;
+        if ($function == 'unlock_comment' && Auth::isEditor()) {
+            $rows = Comments::publishComment($value);
+            if ($rows > 0) {
+                foreach (Telegram::getAllEditorChatIds() as $user) {
+                    Telegram::sendMessage($user['telegram_id'], "\u{2705} Kommentar freigeschaltet");
                 }
             }
+        } elseif ($function == 'delete_comment' && Auth::isEditor()) {
+            $rows = Comments::deleteComment($value);
+            if ($rows > 0) {
+                foreach (Telegram::getAllEditorChatIds() as $user) {
+                    Telegram::sendMessage($user['telegram_id'], "\u{274c} Kommentar gelöscht");
+                }
+            }
+        } elseif ($function == 'follow' && Auth::isKnown()) {
+            if ($value == 'yes') $this->follow();
+            else $this->sendMessageToSender('Ok, kein Problem. Wenn Du uns doch folgen möchtest, sende einfach /follow.');
         }
     }
 
-    private function sendMessageToSender($message, $reply_field = null)
+    private function sendMessageToSender(string $message, bool $markdown = true, array $buttons = null, $reply_field = null)
     {
-        Telegram::sendMessage($this->id, $message, reply_field: $reply_field);
+        Telegram::sendMessage($this->id, $message, $markdown, $buttons, $reply_field);
     }
 
     public static function sendMessage(string $chat_id, string $message, bool $markdown = true, array $buttons = null, $reply_field = null)
@@ -180,6 +251,17 @@ class Telegram
         foreach (Telegram::getAllEditorChatIds() as $user) {
             $m = 'Hallo ' . $user['user'] . $message;
             Telegram::sendMessage($user['telegram_id'], $m, buttons: $buttons);
+        }
+    }
+
+    private function follow(): void
+    {
+        Auth::setUserRole(Auth::$pk_user, 'Follower');
+        $message = sprintf("Schön, dass Du uns folgst %s. \u{1F60D}\r\n\r\n\u{2139} Du kannst das jederzeit beenden, indem Du /stop sendest. Möchtest Du dann erneut folgen, sende einfach wieder /follow. Übrigens kannst Du auch Deinen Namen ändern, indem Du /name sendest. ", Auth::$user);
+        $this->sendMessageToSender($message);
+        foreach (Telegram::getAllEditorChatIds() as $user) {
+            $m = 'Hallo ' . $user['user'] . ", es gib einen neuen Follower. \u{1F680}" . sprintf("\r\n\r\nName: %s\r\nUsername Telegram: %s", Auth::$user, Auth::$telegram_username);
+            Telegram::sendMessage($user['telegram_id'], $m);
         }
     }
 
