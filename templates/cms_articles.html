@@ -19,6 +19,7 @@
     <div class="td" style="width: 30%;">
         <a href="/cms/articles/{{ article.pk_article }}">bearbeiten</a>
         <a href="javascript:if(confirm('Eintrag wirklich löschen?')){window.location.href='/cms/articles/{{ article.pk_article }}/delete';}">löschen</a>
+        <a href="javascript:if(confirm('Eintrag wirklich an alle Follower senden?')){window.location.href='/cms/articles/{{ article.pk_article }}/share';}">share</a>
     </div>
 </div>
 {% endfor %}

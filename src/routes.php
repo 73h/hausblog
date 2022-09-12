@@ -74,6 +74,12 @@ Route::add('/cms/articles/([0-9]+)/delete', function (int $pk_article) {
     $app->cms_article_delete($pk_article);
 }, ['get']);
 
+Route::add('/cms/articles/([0-9]+)/share', function (int $pk_article) {
+    redirectWhenNotAuth();
+    $app = new Cms();
+    $app->cms_article_share($pk_article);
+}, ['get']);
+
 Route::add('/cms/articles/new', function () {
     redirectWhenNotAuth();
     $app = new Cms();

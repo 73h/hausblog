@@ -42,6 +42,18 @@ class Cms extends App
         exit;
     }
 
+    public function cms_article_share(int $pk_article)
+    {
+        //$article = Articles::getArticle($pk_article);
+        $url = URL . '/articles/' . $pk_article;
+        foreach (Telegram::getAllFollower() as $user) {
+            $message = 'Hallo ' . $user['user'] . ", Jessi und Heiko haben einen neuen Beitrag veröffentlicht.\r\n\r\nDein Hausblog-Bot \u{1F916}\u{1F9E1}\r\n\r\n" . $url;
+            Telegram::sendMessage($user['telegram_id'], $message, web_page_preview: true);
+        }
+        header('Location: /cms/articles');
+        exit;
+    }
+
     public function cms_article(?int $pk_article)
     {
         $message = '';

@@ -177,14 +177,14 @@ class Telegram
         if ($function == 'unlock_comment' && Auth::isEditor()) {
             $rows = Comments::publishComment($value);
             if ($rows > 0) {
-                foreach (Telegram::getAllEditorChatIds() as $user) {
+                foreach (Telegram::getAllEditors() as $user) {
                     Telegram::sendMessage($user['telegram_id'], "\u{2705} Kommentar freigeschaltet");
                 }
             }
         } elseif ($function == 'delete_comment' && Auth::isEditor()) {
             $rows = Comments::deleteComment($value);
             if ($rows > 0) {
-                foreach (Telegram::getAllEditorChatIds() as $user) {
+                foreach (Telegram::getAllEditors() as $user) {
                     Telegram::sendMessage($user['telegram_id'], "\u{274c} Kommentar gelöscht");
                 }
             }
@@ -199,14 +199,14 @@ class Telegram
         Telegram::sendMessage($this->id, $message, $markdown, $buttons, $reply_field);
     }
 
-    public static function sendMessage(string $chat_id, string $message, bool $markdown = true, array $buttons = null, $reply_field = null)
+    public static function sendMessage(string $chat_id, string $message, bool $markdown = true, array $buttons = null, $reply_field = null, $web_page_preview = false)
     {
         $url = Telegram::getApiUrl() . 'sendMessage';
         $encodedMarkup = json_encode(array('inline_keyboard' => $buttons));
         $data = array(
             'chat_id' => $chat_id,
             'text' => str_replace('_', '-', $message),
-            'disable_web_page_preview' => true
+            'disable_web_page_preview' => !$web_page_preview
         );
         if ($buttons != null) {
             $data['reply_markup'] = $encodedMarkup;
@@ -229,9 +229,15 @@ class Telegram
         file_get_contents($url, false, $context);
     }
 
-    public static function getAllEditorChatIds()
+    public static function getAllEditors()
     {
         $sql = "select user, telegram_id from tbl_users where telegram_id is not null and role in ('Admin','Editor')";
+        return Database::select($sql);
+    }
+
+    public static function getAllFollower()
+    {
+        $sql = "select user, telegram_id from tbl_users where telegram_id is not null and role is not null";
         return Database::select($sql);
     }
 
@@ -248,7 +254,7 @@ class Telegram
             array('text' => 'Freischalten', 'callback_data' => Telegram::getCallbackButton('unlock_comment', strval($pk_comment))),
             array('text' => 'Löschen', 'callback_data' => Telegram::getCallbackButton('delete_comment', strval($pk_comment)))
         ));
-        foreach (Telegram::getAllEditorChatIds() as $user) {
+        foreach (Telegram::getAllEditors() as $user) {
             $m = 'Hallo ' . $user['user'] . $message;
             Telegram::sendMessage($user['telegram_id'], $m, buttons: $buttons);
         }
@@ -259,7 +265,7 @@ class Telegram
         Auth::setUserRole(Auth::$pk_user, 'Follower');
         $message = sprintf("Schön, dass Du uns folgst %s. \u{1F60D}\r\n\r\n\u{2139} Du kannst das jederzeit beenden, indem Du /stop sendest. Möchtest Du dann erneut folgen, sende einfach wieder /follow. Übrigens kannst Du auch Deinen Namen ändern, indem Du /name sendest. ", Auth::$user);
         $this->sendMessageToSender($message);
-        foreach (Telegram::getAllEditorChatIds() as $user) {
+        foreach (Telegram::getAllEditors() as $user) {
             $m = 'Hallo ' . $user['user'] . ", es gib einen neuen Follower. \u{1F680}" . sprintf("\r\n\r\nName: %s\r\nUsername Telegram: %s", Auth::$user, Auth::$telegram_username);
             Telegram::sendMessage($user['telegram_id'], $m);
         }
