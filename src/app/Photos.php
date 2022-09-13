@@ -11,7 +11,7 @@ class Photos
         string $thumbnail,
         string $thumbnail_type,
         string $photo,
-        string $photo_type)
+        string $photo_type): int
     {
         $sql = <<<EOD
             insert into tbl_photos
@@ -26,7 +26,7 @@ class Photos
             $photo,
             $photo_type
         ];
-        Database::insert($sql, 'ssssss', $parameters);
+        return Database::insert($sql, 'ssssss', $parameters);
     }
 
     public static function getPhoto(int $pk_photo, string $id, bool $thumbnail): ?array

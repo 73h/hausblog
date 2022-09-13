@@ -9,7 +9,8 @@ class Telegram
     private string $username;
     private array $questions = array(
         'name' => "Wie darf ich Dich nennen?",
-        'code' => "Wie lautet der Code?"
+        'code' => "Wie lautet der Code?",
+        'image-title' => "Wie ist der Titel des Bildes?"
     );
 
     function __construct(string $id, string $username)
@@ -71,7 +72,7 @@ class Telegram
             $thumbnail = $this->getPhoto($photo_list[1]);
             $title = uniqid();
             $image = new Photos();
-            $image->insertPhoto(
+            $pk_photo = $image->insertPhoto(
                 uploaded: now()->format('c'),
                 title: $title,
                 thumbnail: $thumbnail->photo,
@@ -80,6 +81,7 @@ class Telegram
                 photo_type: $photo->type
             );
             $this->sendMessageToSender("Danke " . Auth::$user . ", das Bild hab ich gespeichert. \u{1F680}");
+            $this->sendMessageToSender($this->questions['image-title'] . ' #' . strval($pk_photo), reply_field: 'Bildtitel');
         } else $this->sendNotAllowedInfo();
     }
 
@@ -124,7 +126,7 @@ class Telegram
 
     private function isQuestion(string $replay_question, string $question): bool
     {
-        return (preg_replace("/[^A-Za-z0-9 ]/", '', $replay_question) == preg_replace("/[^A-Za-z0-9 ]/", '', ($this->questions[$question])));
+        return str_starts_with(preg_replace("/[^A-Za-z0-9 ]/", '', $replay_question), preg_replace("/[^A-Za-z0-9 ]/", '', ($this->questions[$question])));
     }
 
     public function receiveTextReply(string $text, string $question)
@@ -153,6 +155,11 @@ class Telegram
                     $message = sprintf("Ab sofort nenne ich Dich %s. \u{1F642}", $text);
                     $this->sendMessageToSender($message);
                 }
+            }
+        } else if ($this->isQuestion($question, 'image-title')) {
+            if (Auth::isEditor()) {
+                $pk_photo = intval(preg_replace('/^.+#/', '', $question));
+                Photos::setPhotoTitle($pk_photo, $text);
             }
         } else $this->sendUnknownInfo();
     }
