@@ -94,13 +94,13 @@ class Telegram
             if (Auth::isKnown()) {
                 $message = sprintf("Hallo %s \u{1F60D}\r\nSchön, dass Du vorbei schaust.", Auth::$user);
                 $this->sendMessageToSender($message);
-            } else $this->sendNameQuestion('Ich kenne Dich noch nicht.');
+            } else $this->sendNameQuestion('Du bist neu hier, wir kennen uns noch nicht.');
         } elseif (str_starts_with($text, '/follow')) {
             if (Auth::isKnown()) {
                 if (!Auth::isFollower()) {
                     $this->follow();
                 } else $this->sendMessageToSender("Du folgst uns bereits. \u{1F60D}");
-            } else $this->sendNameQuestion('Ich kenne Dich noch nicht.');
+            } else $this->sendNameQuestion('Du bist neu hier, wir kennen uns noch nicht.');
         } elseif (str_starts_with($text, '/stop')) {
             if (Auth::isKnown()) {
                 if (Auth::isFollower()) {
@@ -111,13 +111,13 @@ class Telegram
                         $this->sendMessageToSender("Du folgst uns jetzt nicht mehr. \u{1F641}");
                     }
                 } else $this->sendMessageToSender("Du folgst uns bereits nicht mehr. \u{1F641}");
-            } else $this->sendNameQuestion('Ich kenne Dich noch nicht.');
+            } else $this->sendNameQuestion('Du bist neu hier, wir kennen uns noch nicht.');
         } elseif (str_starts_with($text, '/name')) {
             if (Auth::isKnown()) {
                 $this->sendNameQuestion('Du möchtest Deinen Namen ändern.');
-            } else $this->sendNameQuestion('Ich kenne Dich noch nicht.');
+            } else $this->sendNameQuestion('Du bist neu hier, wir kennen uns noch nicht.');
         } else {
-            if (Auth::isUnknown()) $this->sendNameQuestion('Ich kenne Dich noch nicht.');
+            if (Auth::isUnknown()) $this->sendNameQuestion('Du bist neu hier, wir kennen uns noch nicht.');
             $this->sendUnknownInfo();
         }
     }
@@ -159,13 +159,13 @@ class Telegram
 
     public function receiveText(string $text)
     {
-        if (Auth::isUnknown()) $this->sendNameQuestion('Ich kenne Dich noch nicht.');
+        if (Auth::isUnknown()) $this->sendNameQuestion('Du bist neu hier, wir kennen uns noch nicht.');
         $this->sendUnknownInfo();
     }
 
     public function receive()
     {
-        if (Auth::isUnknown()) $this->sendNameQuestion('Ich kenne Dich noch nicht.');
+        if (Auth::isUnknown()) $this->sendNameQuestion('Du bist neu hier, wir kennen uns noch nicht.');
         $this->sendUnknownInfo();
     }
 
