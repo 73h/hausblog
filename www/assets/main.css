@@ -191,7 +191,7 @@ main article .created img {
     border-radius: 10px 0 0 10px;
     padding: .6em 1em .5em .6em;
     box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.29);
-    font-size: 1.2em;
+    font-size: 1.6em;
     color: white;
     /*display: none;*/
 }
@@ -239,7 +239,8 @@ main article .created img {
     }
 
     .follow {
-        top: 1em;
+        top: 1.5em;
+        font-size: 1.4em;
     }
 
 }
@@ -385,5 +386,15 @@ main article .created img {
     .embedded-videos iframe {
         width: 100%;
         height: calc((100vw - 3em) / 1.77);
+    }
+}
+
+.click-me-notification {
+    animation: click-me-notification 1.5s linear 0s infinite normal none;
+}
+
+@keyframes click-me-notification {
+    50% {
+        box-shadow: 0 0 2em 1em rgba(76, 139, 255, 0.5);
     }
 }
